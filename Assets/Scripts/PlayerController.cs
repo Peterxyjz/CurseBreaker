@@ -13,18 +13,21 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float hpBonus = 1f;
     [SerializeField] private Image hpBar;
     [SerializeField] private TextMeshProUGUI textHp;
-
+    [SerializeField] private float attackCooldown = 0.5f; // Thời gian hồi chiêu
 
     private float currentHp;
     private Rigidbody2D rb;
     private Animator animator;
     private bool isGrounded;
     private float lastAttackTime;
+    private bool isAttacking = false;
 
+    private Sword sword; // Tham chiếu đến kiếm
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        sword = GetComponentInChildren<Sword>();
     }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -41,12 +44,18 @@ public class PlayerController : MonoBehaviour
     {
         HandleMovement();
         HandleJump();
+        HandleAttack();
         UpdateAnimation();
 
     }
 
     private void HandleMovement()
     {
+        if (isAttacking)
+        {
+            rb.linearVelocity = Vector2.zero; // Giữ nhân vật đứng yên khi tấn công
+            return;
+        }
         float moveInput = Input.GetAxis("Horizontal");
         rb.linearVelocity = new Vector2(moveInput * moveSpeed, rb.linearVelocity.y);
         if (moveInput > 0)
@@ -69,6 +78,29 @@ public class PlayerController : MonoBehaviour
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
     }
 
+    private void HandleAttack()
+    {
+        if (!isGrounded) return;
+        if (Input.GetKeyDown(KeyCode.J) && Time.time > lastAttackTime + attackCooldown)
+        {
+            lastAttackTime = Time.time;
+            isAttacking = true;
+            rb.linearVelocity = Vector2.zero;
+            animator.SetBool("isAttacking", isAttacking);
+
+            if (sword != null)
+            {
+                sword.PerformAttack(damage);
+                StartCoroutine(ResetAttack());
+            }
+        }
+    }
+    private IEnumerator ResetAttack()
+    {
+        yield return new WaitForSeconds(0.5f); // Thời gian hoạt ảnh tấn công (có thể thay đổi)
+        isAttacking = false;
+        animator.SetBool("isAttacking", isAttacking);
+    }
 
     private void UpdateAnimation()
     {

@@ -6,7 +6,7 @@ public class BasicEnemy : Enemy
     private Vector3 startPos;
     private bool movingRight = true;
 
-    void Start()
+    protected override void Start()
     {
         base.Start();
         startPos = transform.position;

@@ -5,19 +5,31 @@ public abstract class Enemy : MonoBehaviour
 {
     [SerializeField] protected float enemyMoveSpeed = 1f;
     [SerializeField] protected float enemyDamage = 1f;
+    [SerializeField] protected float maxHp = 5f; // Thêm HP tối đa
+    protected float currentHp;
     protected PlayerController player; 
     protected virtual void Start()
     {
         player = FindAnyObjectByType<PlayerController>();
+        currentHp = maxHp;
     }
     public virtual void TakeDamage(float damage)
     {
-        Die();
+        currentHp -= damage;
+        Debug.Log(gameObject.name + " nhận " + damage + " sát thương. HP còn lại: " + currentHp);
+        if (currentHp <= 0)
+        {
+            Debug.Log("die");
+            Destroy(gameObject);
+            Die();
+        }
+        
     }
     protected virtual void Die()
     {
-        DisableColliders();
+ 
         FadeOutAndDestroy();
+        DisableColliders();
     }
     protected virtual void HandleMovement()
     {
@@ -56,6 +68,7 @@ public abstract class Enemy : MonoBehaviour
         }
 
         // Sau khi mờ dần, hủy đối tượng
+        Debug.Log("đã xóa ");
         Destroy(gameObject);
     }
     private void DisableColliders()
