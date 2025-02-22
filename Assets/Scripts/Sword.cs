@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-
+using System.Collections;
 public class Sword : MonoBehaviour
 {
     private BoxCollider2D attackCollider;
@@ -50,14 +50,21 @@ public class Sword : MonoBehaviour
         }
     }
 
-    public void PerformAttack(float damage)
+    IEnumerator DelayedAttackEffect()
     {
-        attackCollider.enabled = true; // Bật Collider để phát hiện va chạm
+        yield return new WaitForSeconds(0.17f);
 
         if (attackEffect != null)
         {
             attackEffect.SetActive(true);
         }
+    }
+
+    public void PerformAttack(float damage)
+    {
+        attackCollider.enabled = true; // Bật Collider để phát hiện va chạm
+
+        StartCoroutine(DelayedAttackEffect()); // Gọi Coroutine để trì hoãn hiệu ứng
 
         DrawAttackBox(); // Hiển thị vùng tấn công bằng LineRenderer
 
@@ -79,6 +86,7 @@ public class Sword : MonoBehaviour
         Invoke(nameof(DisableAttack), attackDuration);
     }
 
+
     private void DrawAttackBox()
     {
         Vector3 attackPosition = transform.position;
@@ -99,6 +107,8 @@ public class Sword : MonoBehaviour
 
         lineRenderer.enabled = true;
     }
+
+   
 
     private void DisableAttack()
     {

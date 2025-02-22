@@ -21,6 +21,7 @@ public class PlayerController : MonoBehaviour
     private bool isGrounded;
     private float lastAttackTime;
     private bool isAttacking = false;
+    private GameManager gameManager;
 
     private Sword sword; // Tham chiếu đến kiếm
     private void Awake()
@@ -28,6 +29,7 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         sword = GetComponentInChildren<Sword>();
+        gameManager = FindAnyObjectByType<GameManager>();
     }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -81,7 +83,32 @@ public class PlayerController : MonoBehaviour
     private void HandleAttack()
     {
         if (!isGrounded) return;
-        if (Input.GetKeyDown(KeyCode.J) && Time.time > lastAttackTime + attackCooldown)
+        if (Input.GetKey(KeyCode.W) && Input.GetKey(KeyCode.S) && Input.GetKeyDown(KeyCode.J))
+        {
+            Debug.Log("Skill 3");
+
+            isAttacking = true;
+            animator.SetBool("isAttacking", isAttacking);
+            StartCoroutine(ResetAttack(0.5f));
+        }
+        else if (Input.GetKey(KeyCode.W) && Input.GetKeyDown(KeyCode.J))
+        {
+            Debug.Log("Skill 1");
+
+            isAttacking = true;
+            animator.SetBool("isAttacking", isAttacking);
+            StartCoroutine(ResetAttack(0.5f));
+
+        }
+        else if (Input.GetKey(KeyCode.S) && Input.GetKeyDown(KeyCode.J))
+        {
+            Debug.Log("Skill 2");
+
+            isAttacking = true;
+            animator.SetBool("isAttacking", isAttacking);
+            StartCoroutine(ResetAttack(0.5f));
+        }
+        else if (Input.GetKeyDown(KeyCode.J) && Time.time > lastAttackTime + attackCooldown)
         {
             lastAttackTime = Time.time;
             isAttacking = true;
@@ -91,13 +118,16 @@ public class PlayerController : MonoBehaviour
             if (sword != null)
             {
                 sword.PerformAttack(damage);
-                StartCoroutine(ResetAttack());
+                StartCoroutine(ResetAttack(0.5f));
             }
         }
+
+
     }
-    private IEnumerator ResetAttack()
+
+    private IEnumerator ResetAttack(float time)
     {
-        yield return new WaitForSeconds(0.5f); // Thời gian hoạt ảnh tấn công (có thể thay đổi)
+        yield return new WaitForSeconds(time); // Thời gian hoạt ảnh tấn công (có thể thay đổi)
         isAttacking = false;
         animator.SetBool("isAttacking", isAttacking);
     }
@@ -110,6 +140,14 @@ public class PlayerController : MonoBehaviour
         animator.SetBool("isRunning", isRunning);
         animator.SetBool("isJumping", isJumping);
         animator.SetBool("isDie", isDie);
+    }
+
+    public void HealHp(float amount)
+    {
+        currentHp += amount;
+        currentHp = Mathf.Min(currentHp, maxHp); // Giới hạn không vượt quá maxHp
+        textHp.text = currentHp.ToString() + "/" + maxHp.ToString();
+        UpdateHpBar();
     }
 
     public void TakeDamage(float damage)
@@ -127,6 +165,11 @@ public class PlayerController : MonoBehaviour
     {
         DisableColliders();
         FadeOutAndDestroy();
+        Invoke(nameof(CallGameOver), 2f);
+    }
+    private void CallGameOver()
+    {
+        gameManager.GameOver();
     }
     private void UpdateHpBar()
     {
