@@ -1,35 +1,54 @@
 ﻿using UnityEditor.Tilemaps;
 using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 public abstract class Enemy : MonoBehaviour
 {
     [SerializeField] protected float enemyMoveSpeed = 1f;
     [SerializeField] protected float enemyDamage = 1f;
     [SerializeField] protected float maxHp = 5f; // Thêm HP tối đa
+    [SerializeField] protected Image hpBar; 
     protected float currentHp;
-    protected PlayerController player; 
+    protected PlayerController player;
+    private bool isDying = false; // Tránh gọi Die() nhiều lần
     protected virtual void Start()
     {
         player = FindAnyObjectByType<PlayerController>();
         currentHp = maxHp;
+        UpdateHpBar();
     }
     public virtual void TakeDamage(float damage)
     {
+        if (isDying) return;
         currentHp -= damage;
-        Debug.Log(gameObject.name + " nhận " + damage + " sát thương. HP còn lại: " + currentHp);
+        currentHp = Mathf.Max(currentHp, 0);
+        UpdateHpBar();
         if (currentHp <= 0)
-        {
-            Debug.Log("die");
-            Destroy(gameObject);
+        {                  
             Die();
         }
         
     }
+    protected void UpdateHpBar()
+    {
+        if (hpBar != null)
+        {
+            hpBar.fillAmount = currentHp/maxHp;
+        }
+    }
     protected virtual void Die()
     {
- 
-        FadeOutAndDestroy();
+        if (isDying) return;
+        isDying = true;
+        Debug.Log(gameObject.name + " đang chết...");
+
+        // 1. Dừng di chuyển
+        enabled = false; // Vô hiệu hóa script điều khiển
+
         DisableColliders();
+
+        StartCoroutine(FadeOutAndDestroy());
+
     }
     protected virtual void HandleMovement()
     {
@@ -41,34 +60,25 @@ public abstract class Enemy : MonoBehaviour
     }
     private IEnumerator FadeOutAndDestroy()
     {
-        // Lấy SpriteRenderer của đối tượng
         SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
 
-        // Kiểm tra nếu có SpriteRenderer
         if (spriteRenderer != null)
         {
-            // Đặt thời gian fade (2 giây)
-            float fadeDuration = 2f;
+            float fadeDuration = 1f;
             float timeElapsed = 0f;
-
-            // Lấy màu hiện tại của Sprite
             Color startColor = spriteRenderer.color;
 
-            // Mờ dần trong 2 giây
             while (timeElapsed < fadeDuration)
             {
                 timeElapsed += Time.deltaTime;
-
-                // Tính toán giá trị alpha dựa trên thời gian
                 float alpha = Mathf.Lerp(1f, 0f, timeElapsed / fadeDuration);
                 spriteRenderer.color = new Color(startColor.r, startColor.g, startColor.b, alpha);
 
-                yield return null; // Đợi 1 frame
+                yield return null;
             }
         }
 
-        // Sau khi mờ dần, hủy đối tượng
-        Debug.Log("đã xóa ");
+        Debug.Log(gameObject.name + " đã bị xóa!");
         Destroy(gameObject);
     }
     private void DisableColliders()
