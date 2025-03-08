@@ -163,7 +163,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -842278865
-  m_SortingLayer: 1
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_Sprite: {fileID: -3753825769889500098, guid: fff8cb16b616ba340a6601852bb6890d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -434,6 +434,11 @@ MonoBehaviour:
   hpBar: {fileID: 0}
   textHp: {fileID: 0}
   attackCooldown: 0.5
+  skill0Cooldown: 5
+  skill1Cooldown: 5
+  skill2Cooldown: 5
+  skill3Cooldown: 5
+  shieldEffect: {fileID: 2787387032018961055, guid: 849fe129855c9514586731781c5b4f51, type: 3}
 --- !u!95 &615332103889344632
 Animator:
   serializedVersion: 7

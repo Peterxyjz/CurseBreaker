@@ -14,6 +14,7 @@ public class Sword : MonoBehaviour
     public Vector3 offsetRight = new Vector3(0.5f, 0, 0);
     public Vector3 offsetLeft = new Vector3(-0.5f, 0, 0);
 
+
     private void Start()
     {
         // Khởi tạo BoxCollider2D (nếu chưa có)
@@ -68,23 +69,24 @@ public class Sword : MonoBehaviour
 
         DrawAttackBox(); // Hiển thị vùng tấn công bằng LineRenderer
 
-        // Kiểm tra kẻ địch trúng đòn
-        Collider2D[] hitEnemies = Physics2D.OverlapBoxAll(transform.position, attackSize, 0, enemyLayer);
-        foreach (Collider2D enemy in hitEnemies)
-        {
-            if (enemy.CompareTag("Enemy"))
-            {
-                Enemy enemyController = enemy.GetComponent<Enemy>();
-                if (enemyController != null)
-                {
-                    enemyController.TakeDamage(damage);
-                    Debug.Log("🗡 Gây sát thương cho " + enemy.gameObject.name);
-                }
-            }
-        }
+        //// Kiểm tra kẻ địch trúng đòn
+        //Collider2D[] hitEnemies = Physics2D.OverlapBoxAll(transform.position, attackSize, 0, enemyLayer);
+        //foreach (Collider2D enemy in hitEnemies)
+        //{
+        //    if (enemy.CompareTag("Enemy"))
+        //    {
+        //        Enemy enemyController = enemy.GetComponent<Enemy>();
+        //        if (enemyController != null)
+        //        {
+        //            enemyController.TakeDamage(damage);
+        //            Debug.Log("🗡 Gây sát thương cho " + enemy.gameObject.name);
+        //        }
+        //    }
+        //}
 
         Invoke(nameof(DisableAttack), attackDuration);
     }
+
 
 
     private void DrawAttackBox()
@@ -122,7 +124,7 @@ public class Sword : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Enemy"))
+        if ( collision.CompareTag("Enemy"))
         {
             Enemy enemyController = collision.GetComponent<Enemy>();
             if (enemyController != null)
