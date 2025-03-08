@@ -1,0 +1,557 @@
+fileFormatVersion: 2
+guid: 40a5bc7fae8f5de4fac08c97642a8938
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 5601405850018792127
+    second: Spell casting Magic Symbol 01 Small 256x256 Green_0
+  - first:
+      213: 8566423767080901317
+    second: Spell casting Magic Symbol 01 Small 256x256 Green_1
+  - first:
+      213: -5333813868679226358
+    second: Spell casting Magic Symbol 01 Small 256x256 Green_2
+  - first:
+      213: -8848203930677971100
+    second: Spell casting Magic Symbol 01 Small 256x256 Green_3
+  - first:
+      213: -14543733702801065
+    second: Spell casting Magic Symbol 01 Small 256x256 Green_4
+  - first:
+      213: -4955653343713661747
+    second: Spell casting Magic Symbol 01 Small 256x256 Green_5
+  - first:
+      213: 4164299634459517484
+    second: Spell casting Magic Symbol 01 Small 256x256 Green_6
+  - first:
+      213: 7178966940471515466
+    second: Spell casting Magic Symbol 01 Small 256x256 Green_7
+  - first:
+      213: -6738105111179636119
+    second: Spell casting Magic Symbol 01 Small 256x256 Green_8
+  - first:
+      213: 9222462442067103970
+    second: Spell casting Magic Symbol 01 Small 256x256 Green_9
+  - first:
+      213: 4141302528075745289
+    second: Spell casting Magic Symbol 01 Small 256x256 Green_10
+  - first:
+      213: -6432647517917159277
+    second: Spell casting Magic Symbol 01 Small 256x256 Green_11
+  - first:
+      213: 6935068371722333112
+    second: Spell casting Magic Symbol 01 Small 256x256 Green_12
+  - first:
+      213: 7297046430775020496
+    second: Spell casting Magic Symbol 01 Small 256x256 Green_13
+  - first:
+      213: 8119804177646300106
+    second: Spell casting Magic Symbol 01 Small 256x256 Green_14
+  - first:
+      213: -9002338568387483864
+    second: Spell casting Magic Symbol 01 Small 256x256 Green_15
+  - first:
+      213: 7782064806000910763
+    second: Spell casting Magic Symbol 01 Small 256x256 Green_16
+  - first:
+      213: -7526855914939907666
+    second: Spell casting Magic Symbol 01 Small 256x256 Green_17
+  - first:
+      213: -7454365389344547175
+    second: Spell casting Magic Symbol 01 Small 256x256 Green_18
+  - first:
+      213: -8164787252309605459
+    second: Spell casting Magic Symbol 01 Small 256x256 Green_19
+  - first:
+      213: -9017734553366707624
+    second: Spell casting Magic Symbol 01 Small 256x256 Green_20
+  - first:
+      213: 1283141687145884108
+    second: Spell casting Magic Symbol 01 Small 256x256 Green_21
+  - first:
+      213: -1799005402266549416
+    second: Spell casting Magic Symbol 01 Small 256x256 Green_22
+  - first:
+      213: -5802791220633263165
+    second: Spell casting Magic Symbol 01 Small 256x256 Green_23
+  - first:
+      213: 1317854834703977776
+    second: Spell casting Magic Symbol 01 Small 256x256 Green_24
+  - first:
+      213: 5793573674161281260
+    second: Spell casting Magic Symbol 01 Small 256x256 Green_25
+  - first:
+      213: 6579688131389437418
+    second: Spell casting Magic Symbol 01 Small 256x256 Green_26
+  - first:
+      213: -594870766053350297
+    second: Spell casting Magic Symbol 01 Small 256x256 Green_27
+  - first:
+      213: -4582384655360677498
+    second: Spell casting Magic Symbol 01 Small 256x256 Green_28
+  - first:
+      213: 6085766827730744692
+    second: Spell casting Magic Symbol 01 Small 256x256 Green_29
+  - first:
+      213: -7112222101672320470
+    second: Spell casting Magic Symbol 01 Small 256x256 Green_30
+  - first:
+      213: 3139789924396707816
+    second: Spell casting Magic Symbol 01 Small 256x256 Green_31
+  - first:
+      213: -6072863705880641791
+    second: Spell casting Magic Symbol 01 Small 256x256 Green_32
+  - first:
+      213: -3350987130564668117
+    second: Spell casting Magic Symbol 01 Small 256x256 Green_33
+  - first:
+      213: 3988660428153981666
+    second: Spell casting Magic Symbol 01 Small 256x256 Green_34
+  - first:
+      213: -6869359020441710074
+    second: Spell casting Magic Symbol 01 Small 256x256 Green_35
+  - first:
+      213: -8238880110675613799
+    second: Spell casting Magic Symbol 01 Small 256x256 Green_36
+  - first:
+      213: -4971522963488919956
+    second: Spell casting Magic Symbol 01 Small 256x256 Green_37
+  - first:
+      213: 109834654449884953
+    second: Spell casting Magic Symbol 01 Small 256x256 Green_38
+  - first:
+      213: -8734295940411285186
+    second: Spell casting Magic Symbol 01 Small 256x256 Green_39
+  - first:
+      213: 4175727588436371222
+    second: Spell casting Magic Symbol 01 Small 256x256 Green_40
+  - first:
+      213: 6118237139210453163
+    second: Spell casting Magic Symbol 01 Small 256x256 Green_41
+  - first:
+      213: -8201204326087318907
+    second: Spell casting Magic Symbol 01 Small 256x256 Green_42
+  - first:
+      213: -6474845816646995760
+    second: Spell casting Magic Symbol 01 Small 256x256 Green_43
+  - first:
+      213: -7013552778891088383
+    second: Spell casting Magic Symbol 01 Small 256x256 Green_44
+  - first:
+      213: 5926841225926827547
+    second: Spell casting Magic Symbol 01 Small 256x256 Green_45
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 45
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Spell casting Magic Symbol 01 Small 256x256 Green_0
+      rect:
+        serializedVersion: 2
+        x: 44
+        y: 809
+        width: 168
+        height: 166
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fb24a2d61f03cbd40800000000000000
+      internalID: 5601405850018792127
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spell casting Magic Symbol 01 Small 256x256 Green_1
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 809
+        width: 168
+        height: 166
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5ca1250870d02e670800000000000000
+      internalID: 8566423767080901317
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spell casting Magic Symbol 01 Small 256x256 Green_2
+      rect:
+        serializedVersion: 2
+        x: 556
+        y: 809
+        width: 168
+        height: 166
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a0c9253db8c7af5b0800000000000000
+      internalID: -5333813868679226358
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spell casting Magic Symbol 01 Small 256x256 Green_8
+      rect:
+        serializedVersion: 2
+        x: 813
+        y: 809
+        width: 167
+        height: 166
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 962d4e4f9117d72a0800000000000000
+      internalID: -6738105111179636119
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spell casting Magic Symbol 01 Small 256x256 Green_39
+      rect:
+        serializedVersion: 2
+        x: 44
+        y: 553
+        width: 168
+        height: 166
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e3126a45e1c89c680800000000000000
+      internalID: -8734295940411285186
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spell casting Magic Symbol 01 Small 256x256 Green_40
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 553
+        width: 168
+        height: 166
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6176c832e1a23f930800000000000000
+      internalID: 4175727588436371222
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spell casting Magic Symbol 01 Small 256x256 Green_41
+      rect:
+        serializedVersion: 2
+        x: 556
+        y: 553
+        width: 168
+        height: 166
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ba0cd36234858e450800000000000000
+      internalID: 6118237139210453163
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spell casting Magic Symbol 01 Small 256x256 Green_42
+      rect:
+        serializedVersion: 2
+        x: 812
+        y: 553
+        width: 168
+        height: 166
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5822b250e187f2e80800000000000000
+      internalID: -8201204326087318907
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spell casting Magic Symbol 01 Small 256x256 Green_43
+      rect:
+        serializedVersion: 2
+        x: 44
+        y: 297
+        width: 168
+        height: 166
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0d0f453f80ab426a0800000000000000
+      internalID: -6474845816646995760
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spell casting Magic Symbol 01 Small 256x256 Green_44
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 297
+        width: 168
+        height: 166
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 10e2eb038eadaae90800000000000000
+      internalID: -7013552778891088383
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spell casting Magic Symbol 01 Small 256x256 Green_45
+      rect:
+        serializedVersion: 2
+        x: 557
+        y: 296
+        width: 167
+        height: 167
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b1e528771be504250800000000000000
+      internalID: 5926841225926827547
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 40538b20db9117f40962e106f37860ac
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Spell casting Magic Symbol 01 Small 256x256 Green_0: 5601405850018792127
+      Spell casting Magic Symbol 01 Small 256x256 Green_1: 8566423767080901317
+      Spell casting Magic Symbol 01 Small 256x256 Green_10: 4141302528075745289
+      Spell casting Magic Symbol 01 Small 256x256 Green_11: -6432647517917159277
+      Spell casting Magic Symbol 01 Small 256x256 Green_12: 6935068371722333112
+      Spell casting Magic Symbol 01 Small 256x256 Green_13: 7297046430775020496
+      Spell casting Magic Symbol 01 Small 256x256 Green_14: 8119804177646300106
+      Spell casting Magic Symbol 01 Small 256x256 Green_15: -9002338568387483864
+      Spell casting Magic Symbol 01 Small 256x256 Green_16: 7782064806000910763
+      Spell casting Magic Symbol 01 Small 256x256 Green_17: -7526855914939907666
+      Spell casting Magic Symbol 01 Small 256x256 Green_18: -7454365389344547175
+      Spell casting Magic Symbol 01 Small 256x256 Green_19: -8164787252309605459
+      Spell casting Magic Symbol 01 Small 256x256 Green_2: -5333813868679226358
+      Spell casting Magic Symbol 01 Small 256x256 Green_20: -9017734553366707624
+      Spell casting Magic Symbol 01 Small 256x256 Green_21: 1283141687145884108
+      Spell casting Magic Symbol 01 Small 256x256 Green_22: -1799005402266549416
+      Spell casting Magic Symbol 01 Small 256x256 Green_23: -5802791220633263165
+      Spell casting Magic Symbol 01 Small 256x256 Green_24: 1317854834703977776
+      Spell casting Magic Symbol 01 Small 256x256 Green_25: 5793573674161281260
+      Spell casting Magic Symbol 01 Small 256x256 Green_26: 6579688131389437418
+      Spell casting Magic Symbol 01 Small 256x256 Green_27: -594870766053350297
+      Spell casting Magic Symbol 01 Small 256x256 Green_28: -4582384655360677498
+      Spell casting Magic Symbol 01 Small 256x256 Green_29: 6085766827730744692
+      Spell casting Magic Symbol 01 Small 256x256 Green_3: -8848203930677971100
+      Spell casting Magic Symbol 01 Small 256x256 Green_30: -7112222101672320470
+      Spell casting Magic Symbol 01 Small 256x256 Green_31: 3139789924396707816
+      Spell casting Magic Symbol 01 Small 256x256 Green_32: -6072863705880641791
+      Spell casting Magic Symbol 01 Small 256x256 Green_33: -3350987130564668117
+      Spell casting Magic Symbol 01 Small 256x256 Green_34: 3988660428153981666
+      Spell casting Magic Symbol 01 Small 256x256 Green_35: -6869359020441710074
+      Spell casting Magic Symbol 01 Small 256x256 Green_36: -8238880110675613799
+      Spell casting Magic Symbol 01 Small 256x256 Green_37: -4971522963488919956
+      Spell casting Magic Symbol 01 Small 256x256 Green_38: 109834654449884953
+      Spell casting Magic Symbol 01 Small 256x256 Green_39: -8734295940411285186
+      Spell casting Magic Symbol 01 Small 256x256 Green_4: -14543733702801065
+      Spell casting Magic Symbol 01 Small 256x256 Green_40: 4175727588436371222
+      Spell casting Magic Symbol 01 Small 256x256 Green_41: 6118237139210453163
+      Spell casting Magic Symbol 01 Small 256x256 Green_42: -8201204326087318907
+      Spell casting Magic Symbol 01 Small 256x256 Green_43: -6474845816646995760
+      Spell casting Magic Symbol 01 Small 256x256 Green_44: -7013552778891088383
+      Spell casting Magic Symbol 01 Small 256x256 Green_45: 5926841225926827547
+      Spell casting Magic Symbol 01 Small 256x256 Green_46: -1104996213
+      Spell casting Magic Symbol 01 Small 256x256 Green_5: -4955653343713661747
+      Spell casting Magic Symbol 01 Small 256x256 Green_6: 4164299634459517484
+      Spell casting Magic Symbol 01 Small 256x256 Green_7: 7178966940471515466
+      Spell casting Magic Symbol 01 Small 256x256 Green_8: -6738105111179636119
+      Spell casting Magic Symbol 01 Small 256x256 Green_9: 9222462442067103970
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -1,4 +1,5 @@
-﻿using UnityEditor.Tilemaps;
+﻿using UnityEngine.Tilemaps;
+using UnityEngine.Rendering;
 using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
@@ -11,6 +12,7 @@ public abstract class Enemy : MonoBehaviour
     protected float currentHp;
     protected PlayerController player;
     private bool isDying = false; // Tránh gọi Die() nhiều lần
+    private bool hasHit = false;
     protected virtual void Start()
     {
         player = FindAnyObjectByType<PlayerController>();
@@ -19,16 +21,23 @@ public abstract class Enemy : MonoBehaviour
     }
     public virtual void TakeDamage(float damage)
     {
-        if (isDying) return;
+        if (hasHit || isDying) return;
         currentHp -= damage;
         currentHp = Mathf.Max(currentHp, 0);
+        hasHit = true;
         UpdateHpBar();
         if (currentHp <= 0)
         {                  
             Die();
         }
-        
+        Invoke(nameof(ResetTakeDamage), 0.2f);
     }
+    private void ResetTakeDamage()
+    {
+        Debug.Log("reset attacked");
+        hasHit = false;
+    }
+
     protected void UpdateHpBar()
     {
         if (hpBar != null)
