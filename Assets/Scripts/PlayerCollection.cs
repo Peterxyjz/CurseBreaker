@@ -40,6 +40,9 @@ public class PlayerCollection : MonoBehaviour
         {
             player.TakeDamage(1f);
             Debug.Log("tru mau");
+        }else if (collision.CompareTag("GroundDie"))
+        {
+            player.GoToGroundDie();
         }
     }
 }

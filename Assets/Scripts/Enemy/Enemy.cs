@@ -11,7 +11,7 @@ public abstract class Enemy : MonoBehaviour
     [SerializeField] protected Image hpBar; 
     protected float currentHp;
     protected PlayerController player;
-    private bool isDying = false; // Tránh gọi Die() nhiều lần
+    protected bool isDying = false; // Tránh gọi Die() nhiều lần
     private bool hasHit = false;
     protected virtual void Start()
     {

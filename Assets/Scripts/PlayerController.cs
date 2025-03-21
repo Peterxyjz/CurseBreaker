@@ -50,12 +50,16 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float skill2Cooldown = 5f;
     [SerializeField] private float skill3Cooldown = 5f;
 
-
+    [SerializeField] private CooldownSkill skill0UI;
+    [SerializeField] private CooldownSkill skill1UI;
+    [SerializeField] private CooldownSkill skill2UI;
+    [SerializeField] private CooldownSkill skill3UI;
+    private Dictionary<string, CooldownSkill> skillUIMap;
 
     private Sword sword; // Tham chiếu đến kiếm
     public GameObject shieldEffect;
-
-
+    [SerializeField] private Transform positionAttackSkill1;
+    [SerializeField] private GameObject skill1EffectPrefab;
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -72,9 +76,16 @@ public class PlayerController : MonoBehaviour
         LoadPlayerData();
         shieldEffect.SetActive(isShield);
 
-
+        UnlockIconSkill();
         textHp.text = currentHp.ToString() + "/" + maxHp.ToString();
         UpdateHpBar();
+        skillUIMap = new Dictionary<string, CooldownSkill>()
+    {
+        { "Skill0", skill0UI },
+        { "Skill1", skill1UI },
+        { "Skill2", skill2UI },
+        { "Skill3", skill3UI }
+    };
     }
     public void LoadPlayerData()
     {
@@ -169,6 +180,7 @@ public class PlayerController : MonoBehaviour
                 isAttacking = true;
                 animator.SetBool("isAttacking", isAttacking);
                 cooldownTimers["Skill3"] = currentTime + skill3Cooldown; // Đặt thời gian hồi chiêu
+                skill3UI.UseSkill(skill3Cooldown);
                 StartCoroutine(ResetAttack(0.5f));
             }
         }
@@ -181,6 +193,7 @@ public class PlayerController : MonoBehaviour
                 isAttacking = true;
                 animator.SetBool("isAttacking", isAttacking);
                 cooldownTimers["Skill2"] = currentTime + skill1Cooldown; // Đặt thời gian hồi chiêu
+                skill2UI.UseSkill(skill2Cooldown);
                 StartCoroutine(ResetAttack(0.5f));
             }
         }
@@ -193,6 +206,13 @@ public class PlayerController : MonoBehaviour
                 isAttacking = true;
                 animator.SetBool("isAttacking", isAttacking);
                 cooldownTimers["Skill1"] = currentTime + skill2Cooldown; // Đặt thời gian hồi chiêu
+                skill1UI.UseSkill(skill1Cooldown);
+
+                GameObject skill1Ins = Instantiate(skill1EffectPrefab, positionAttackSkill1.position, Quaternion.identity);
+                Skill1 skill1 = skill1Ins.GetComponent<Skill1>();
+                skill1.GetDamage(damage);
+                bool isFacingRight = transform.localScale.x > 0;
+                skill1.SetForwardDistance(7f, isFacingRight);
                 StartCoroutine(ResetAttack(0.5f));
             }
         }
@@ -208,7 +228,7 @@ public class PlayerController : MonoBehaviour
                 // reset time
                 cooldownTimers["Skill0"] = currentTime + skill0Cooldown;
                 //sau 3s thì khiên bảo vệ mất tác dụng
-              
+                skill0UI.UseSkill(skill0Cooldown);
                 StartCoroutine(DisableShieldAfterDelay(1.5f));
 
             }
@@ -387,6 +407,14 @@ public class PlayerController : MonoBehaviour
         {
             unlockedSkills[skillName] = true;
             Debug.Log($"{skillName} has been unlocked!");
+            if (skillUIMap.ContainsKey(skillName))
+            {
+                skillUIMap[skillName].setStatusSkill(true);
+            }
+            else
+            {
+                Debug.LogWarning($"No UI mapped for skill: {skillName}");
+            }
         }
     }
     public Dictionary<string, bool> GetUnlockedSkills()
@@ -415,5 +443,23 @@ public class PlayerController : MonoBehaviour
         Debug.Log("mo khoa di chuyen");
 
     }
+    private void UnlockIconSkill()
+    {
+        // Ẩn icon nếu skill chưa mở khóa
+        if (!unlockedSkills["Skill0"] && skill0UI != null)
+            skill0UI.setStatusSkill(false);
 
+        if (!unlockedSkills["Skill1"] && skill1UI != null)
+            skill1UI.setStatusSkill(false);
+
+        if (!unlockedSkills["Skill2"] && skill2UI != null)
+            skill2UI.setStatusSkill(false);
+
+        if (!unlockedSkills["Skill3"] && skill3UI != null)
+            skill3UI.setStatusSkill(false);
+    }
+    public void GoToGroundDie()
+    {
+        Die();
+    }
 }
