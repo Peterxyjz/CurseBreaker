@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 public class Sword : MonoBehaviour
 {
     private BoxCollider2D attackCollider;
@@ -69,20 +70,27 @@ public class Sword : MonoBehaviour
 
         DrawAttackBox(); // Hiển thị vùng tấn công bằng LineRenderer
 
-        //// Kiểm tra kẻ địch trúng đòn
-        //Collider2D[] hitEnemies = Physics2D.OverlapBoxAll(transform.position, attackSize, 0, enemyLayer);
-        //foreach (Collider2D enemy in hitEnemies)
-        //{
-        //    if (enemy.CompareTag("Enemy"))
-        //    {
-        //        Enemy enemyController = enemy.GetComponent<Enemy>();
-        //        if (enemyController != null)
-        //        {
-        //            enemyController.TakeDamage(damage);
-        //            Debug.Log("🗡 Gây sát thương cho " + enemy.gameObject.name);
-        //        }
-        //    }
-        //}
+        // Kiểm tra kẻ địch trúng đòn
+        Collider2D[] hitEnemies = Physics2D.OverlapBoxAll(transform.position, attackSize, 0, enemyLayer);
+        
+        Debug.Log($"{hitEnemies.Length}");
+
+        foreach (Collider2D enemy in hitEnemies)
+        {
+            if (enemy.CompareTag("Enemy"))
+            {
+                Enemy enemyController = enemy.GetComponent<Enemy>();
+                if (enemyController != null)
+                {
+                    enemyController.TakeDamage(damage);
+                    Debug.Log("🗡 Gây sát thương cho " + enemy.gameObject.name + ":" + damage);
+                }
+                else
+                {
+                    Debug.Log("laaa");
+                }
+            }
+        }
 
         Invoke(nameof(DisableAttack), attackDuration);
     }

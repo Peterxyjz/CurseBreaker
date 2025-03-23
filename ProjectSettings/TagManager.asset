@@ -11,6 +11,7 @@ TagManager:
   - HearthIncrease
   - EnemyBullet
   - NPC
+  - Boss
   layers:
   - Default
   - TransparentFX
