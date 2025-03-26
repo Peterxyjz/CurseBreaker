@@ -59,8 +59,13 @@ public class TreeBoss : Enemy
         // Chờ animation "TreeSkill1" bắt đầu
         yield return new WaitUntil(() => animator.GetCurrentAnimatorStateInfo(0).IsName("TreeSkill1"));
 
+        yield return null;
 
-        
+        // Chờ animation "TreeSkill1" bắt đầu
+        yield return new WaitUntil(() => animator.GetCurrentAnimatorStateInfo(0).IsName("TreeSkill1"));
+
+
+
         int loopCount = 0;
         while (loopCount < loopSkill1)
         {
@@ -68,13 +73,13 @@ public class TreeBoss : Enemy
             yield return new WaitUntil(() => animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f);
 
             loopCount++;
-          
+
 
             // Reset animation để loop lại
             animator.Play("TreeSkill1", 0, 0f);
         }
 
-       
+
 
 
         Vector3 directionPlayer = (player.transform.position - firePoint.position).normalized;

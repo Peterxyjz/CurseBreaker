@@ -6,17 +6,18 @@ using Unity.VisualScripting;
 using System.Collections.Generic;
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private float moveSpeed = 5f;
-    [SerializeField] private float jumpForce = 10f;
+    private float moveSpeed = 5f;
+     private float jumpForce = 10f;
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private Transform groundCheck;
-    [SerializeField] private float damage = 1f;
+     private float damage = 1f;
     [SerializeField] private float maxHp = 5f;
     [SerializeField] private float hpBonus = 0f;
     [SerializeField] private Image hpBar;
     [SerializeField] private TextMeshProUGUI textHp;
     [SerializeField] private float attackCooldown = 1f; // Thời gian hồi chiêu
-    
+
+
 
     private AudioManager audioManager;
     private float currentHp;
@@ -45,17 +46,24 @@ public class PlayerController : MonoBehaviour
     {"Skill2", 0f},
     {"Skill3", 0f}
 };
-    [SerializeField] private float skill0Cooldown = 5f;
-    [SerializeField] private float skill1Cooldown = 5f;
-    [SerializeField] private float skill2Cooldown = 5f;
-    [SerializeField] private float skill3Cooldown = 5f;
+     private float skill0Cooldown = 5f;
+     private float skill1Cooldown = 5f;
+     private float skill2Cooldown = 9f;
+     private float skill3Cooldown = 5f;
 
-
+    [SerializeField] private CooldownSkill skill0UI;
+    [SerializeField] private CooldownSkill skill1UI;
+    [SerializeField] private CooldownSkill skill2UI;
+    [SerializeField] private CooldownSkill skill3UI;
+    private Dictionary<string, CooldownSkill> skillUIMap;
 
     private Sword sword; // Tham chiếu đến kiếm
     public GameObject shieldEffect;
-
-
+    [SerializeField] private Transform positionAttackSkill1;
+    [SerializeField] private GameObject skill1EffectPrefab;
+    public GameObject skill2Effect;
+    public float skill2Duration = 3f;
+    public Skill3 skill3;
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -63,18 +71,26 @@ public class PlayerController : MonoBehaviour
         sword = GetComponentInChildren<Sword>();
         gameManager = FindAnyObjectByType<GameManager>();
         spriteRenderer = GetComponent<SpriteRenderer>();
-        audioManager = FindAnyObjectByType<AudioManager>(); 
-       
+        audioManager = FindAnyObjectByType<AudioManager>();
+
+
     }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         LoadPlayerData();
         shieldEffect.SetActive(isShield);
-
-
+        skill2Effect.SetActive(false);
+        UnlockIconSkill();
         textHp.text = currentHp.ToString() + "/" + maxHp.ToString();
         UpdateHpBar();
+        skillUIMap = new Dictionary<string, CooldownSkill>()
+    {
+        { "Skill0", skill0UI },
+        { "Skill1", skill1UI },
+        { "Skill2", skill2UI },
+        { "Skill3", skill3UI }
+    };
     }
     public void LoadPlayerData()
     {
@@ -168,7 +184,9 @@ public class PlayerController : MonoBehaviour
 
                 isAttacking = true;
                 animator.SetBool("isAttacking", isAttacking);
+                skill3.ActivateSkill(damage);
                 cooldownTimers["Skill3"] = currentTime + skill3Cooldown; // Đặt thời gian hồi chiêu
+                skill3UI.UseSkill(skill3Cooldown);
                 StartCoroutine(ResetAttack(0.5f));
             }
         }
@@ -178,9 +196,11 @@ public class PlayerController : MonoBehaviour
             {
                 Debug.Log("Skill 2");
 
-                isAttacking = true;
-                animator.SetBool("isAttacking", isAttacking);
-                cooldownTimers["Skill2"] = currentTime + skill1Cooldown; // Đặt thời gian hồi chiêu
+                
+               
+                cooldownTimers["Skill2"] = currentTime + skill2Cooldown; // Đặt thời gian hồi chiêu
+                UseSkill2();
+                skill2UI.UseSkill(skill2Cooldown);
                 StartCoroutine(ResetAttack(0.5f));
             }
         }
@@ -192,7 +212,14 @@ public class PlayerController : MonoBehaviour
 
                 isAttacking = true;
                 animator.SetBool("isAttacking", isAttacking);
-                cooldownTimers["Skill1"] = currentTime + skill2Cooldown; // Đặt thời gian hồi chiêu
+                cooldownTimers["Skill1"] = currentTime + skill1Cooldown; // Đặt thời gian hồi chiêu
+                skill1UI.UseSkill(skill1Cooldown);
+
+                GameObject skill1Ins = Instantiate(skill1EffectPrefab, positionAttackSkill1.position, Quaternion.identity);
+                Skill1 skill1 = skill1Ins.GetComponent<Skill1>();
+                skill1.GetDamage(damage);
+                bool isFacingRight = transform.localScale.x > 0;
+                skill1.SetForwardDistance(7f, isFacingRight);
                 StartCoroutine(ResetAttack(0.5f));
             }
         }
@@ -208,7 +235,7 @@ public class PlayerController : MonoBehaviour
                 // reset time
                 cooldownTimers["Skill0"] = currentTime + skill0Cooldown;
                 //sau 3s thì khiên bảo vệ mất tác dụng
-              
+                skill0UI.UseSkill(skill0Cooldown);
                 StartCoroutine(DisableShieldAfterDelay(1.5f));
 
             }
@@ -387,6 +414,14 @@ public class PlayerController : MonoBehaviour
         {
             unlockedSkills[skillName] = true;
             Debug.Log($"{skillName} has been unlocked!");
+            if (skillUIMap.ContainsKey(skillName))
+            {
+                skillUIMap[skillName].setStatusSkill(true);
+            }
+            else
+            {
+                Debug.LogWarning($"No UI mapped for skill: {skillName}");
+            }
         }
     }
     public Dictionary<string, bool> GetUnlockedSkills()
@@ -415,5 +450,47 @@ public class PlayerController : MonoBehaviour
         Debug.Log("mo khoa di chuyen");
 
     }
+    private void UnlockIconSkill()
+    {
+        // Ẩn icon nếu skill chưa mở khóa
+        if (!unlockedSkills["Skill0"] && skill0UI != null)
+            skill0UI.setStatusSkill(false);
 
+        if (!unlockedSkills["Skill1"] && skill1UI != null)
+            skill1UI.setStatusSkill(false);
+
+        if (!unlockedSkills["Skill2"] && skill2UI != null)
+            skill2UI.setStatusSkill(false);
+
+        if (!unlockedSkills["Skill3"] && skill3UI != null)
+            skill3UI.setStatusSkill(false);
+    }
+    public void GoToGroundDie()
+    {
+        Die();
+    }
+
+    public void UseSkill2()
+    {
+        StartCoroutine(Skill2Coroutine());
+    }
+
+    private IEnumerator Skill2Coroutine()
+    {
+        skill2Effect.SetActive(true);
+        float oriDamage = damage;
+        float oriSpeed = moveSpeed;
+        float oriJump = jumpForce;
+        HealHp(1f);
+        damage = oriDamage * 2f;
+     
+        moveSpeed = oriSpeed + 2f;
+      
+        jumpForce = oriJump * 1.25f;
+        yield return new WaitForSeconds(skill2Duration);
+        damage = oriDamage;
+        moveSpeed = oriSpeed;
+        jumpForce = oriJump;
+        skill2Effect.SetActive(false);
+    }
 }

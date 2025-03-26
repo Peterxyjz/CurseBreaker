@@ -15,9 +15,13 @@ EditorBuildSettings:
     path: Assets/Scenes/ForestBoss.unity
     guid: 094b572731a876f4b853f56bd95914f0
   - enabled: 1
+    path: Assets/Scenes/Desert.unity
+    guid: fb0d58fc7bebb78419258f9eba7a7bc1
+  - enabled: 1
+    path: Assets/Scenes/DesertBoss.unity
+    guid: 317441e8530ac1f4cb27e12a98e719f0
     path: Assets/Scenes/Intro/Intro.unity
     guid: efaf521f6b287db4b9c89e0fb27a93cb
-  - enabled: 1
     path: Assets/Scenes/Volcano/Volcano/Volcano.unity
     guid: a100e3594abb4224a9778449461611de
   m_configObjects:
