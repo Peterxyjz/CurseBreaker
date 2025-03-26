@@ -9,7 +9,8 @@ public class Sword : MonoBehaviour
     [SerializeField] private Vector2 attackSize = new Vector2(1.5f, 1f);
     [SerializeField] private LayerMask enemyLayer;
     [SerializeField] private GameObject attackEffect;
-
+    private float attackDamageSword = 0f;
+    private float attackDamgePlayer = 0f;
     public Transform player;
     public Vector3 offsetRight = new Vector3(0.5f, 0, 0);
     public Vector3 offsetLeft = new Vector3(-0.5f, 0, 0);
@@ -64,7 +65,7 @@ public class Sword : MonoBehaviour
     public void PerformAttack(float damage)
     {
         attackCollider.enabled = true; // Bật Collider để phát hiện va chạm
-
+        attackDamgePlayer = damage;
         StartCoroutine(DelayedAttackEffect()); // Gọi Coroutine để trì hoãn hiệu ứng
 
         DrawAttackBox(); // Hiển thị vùng tấn công bằng LineRenderer
@@ -129,7 +130,7 @@ public class Sword : MonoBehaviour
             Enemy enemyController = collision.GetComponent<Enemy>();
             if (enemyController != null)
             {
-                enemyController.TakeDamage(1f);
+                enemyController.TakeDamage(attackDamgePlayer + attackDamageSword);
                 Debug.Log("🗡 Gây sát thương cho " + collision.gameObject.name);
             }
         }

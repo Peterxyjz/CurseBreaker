@@ -12,6 +12,7 @@ public class Skill1 : MonoBehaviour
         Vector3 direction = isFacingRight ? Vector3.right : Vector3.left;
         target = transform.position + direction * distance;
         hasTarget = true;
+        transform.localScale = new Vector3(isFacingRight ? -1 : 1, 1, 1);
     }
 
     private void Update()
