@@ -12,6 +12,7 @@ TagManager:
   - EnemyBullet
   - NPC
   - GroundDie
+  - Boss
   layers:
   - Default
   - TransparentFX

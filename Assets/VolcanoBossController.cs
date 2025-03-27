@@ -1,0 +1,472 @@
+﻿using System.Collections;
+using UnityEngine;
+
+public class VolcanoBossController : Enemy
+{
+
+    [SerializeField] private float distance = 10f;
+    [SerializeField] private GameObject attackNormalPrefabs;
+    [SerializeField] private Transform attackPoint;
+    [SerializeField] private GameObject PlayerObject;
+
+    //private float speed = 5f;
+    //private bool movingRight = true;
+    //private float nextAttackTime;
+    //private bool isRunning;
+    //private bool isAttackNormal;
+    //private bool isAttackSkill;
+    //private bool isBreakerTime = false;
+    //private int loopSkill1 = 5;
+    //private int loopNormal = 3;
+    //private float breakerTime = 10f;
+
+    [SerializeField] private GameObject FireballPrefab;
+    [SerializeField] private Transform FireballSpawnPoint;
+    [SerializeField] private float FireBallCooldown = 4f;
+    private int FireBallCount = 10;
+
+    private Vector3 startPos;
+
+    private Rigidbody2D BossRigidBody;
+    private Animator animator;
+    private AudioBoss audioBoss;
+
+    
+    private bool IsFacingLeft = true;
+    [SerializeField] private bool IsWalking = true;
+    private bool IsSprinting = false;
+    private float MovementSpeed = 5f;
+    private float JumpStrength = 2f;
+    private float SprintMultiplier = 1.75f;
+
+    [SerializeField] private bool IsAttacking = false;
+    private float AttackDamage = 1f;
+
+    Vector2 MovementVector;
+
+    private void Awake()
+    {
+        currentHp = 10f;
+    }
+
+    void Start()
+    {
+        startPos = transform.position;
+        BossRigidBody = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
+        audioBoss = FindAnyObjectByType<AudioBoss>();
+    }
+
+    void Update()
+    {
+
+        UpdateAnimator();
+        //if (Time.time >= nextAttackTime)
+        //{
+        //    UseSkillTime();
+        //}
+
+    }
+
+    private void FixedUpdate()
+    {
+        HandleMeleeAttack();
+        HandleFireballAttack();
+        HandleMovement();
+    }
+
+    void CheckEnrage()
+    {
+        if (currentHp <= 1500)
+        {
+            IsSprinting = true;
+            AttackDamage = 1.5f;
+        }
+    }
+
+    public void TakeDamage(int damage)
+    {
+        currentHp -= damage;
+        Debug.Log(damage);
+
+        if (currentHp <= 200)
+        {
+            GetComponent<Animator>().SetBool("IsEnraged", true);
+        }
+
+        if (currentHp <= 0)
+        {
+
+        }
+    }
+
+    public IEnumerator FinishAttack()
+    {
+        IsAttacking = false;
+        UpdateAnimator();
+        PlayerObject.GetComponent<PlayerController>().TakeDamage(AttackDamage);
+        yield return new WaitForSeconds(1f);   
+        IsWalking = true;
+
+        
+    }
+
+    private void FacePlayer()
+    {
+        if (PlayerObject.transform.position.x > transform.position.x)
+        {
+            transform.localScale = new Vector3(-1, transform.localScale.y, transform.localScale.z);
+            IsFacingLeft = false;
+        }
+        else if (PlayerObject.transform.position.x < transform.position.x)
+        {
+            transform.localScale = new Vector3(1, transform.localScale.y, transform.localScale.z);
+            IsFacingLeft = true;
+        }
+    }
+
+    private void HandleMovement()
+    {
+        float xVelocity = MovementSpeed * 10 * Time.fixedDeltaTime;
+
+        if (IsWalking)
+        {
+            xVelocity *= SprintMultiplier;
+            FacePlayer();
+        }
+        else
+        {
+            xVelocity = 0;
+        }
+        if (IsFacingLeft)
+        {
+            xVelocity *= -1;
+        }
+        
+        float yVelocity = BossRigidBody.linearVelocityY;
+
+        MovementVector = new Vector2(xVelocity, yVelocity);
+
+        BossRigidBody.linearVelocity = MovementVector;
+    }
+
+    private void HandleMeleeAttack()
+    {
+        float player_distance = Mathf.Abs(PlayerObject.transform.position.x - transform.position.x);
+
+        Debug.Log(player_distance);
+
+        if (player_distance < 4.5f)
+        {
+            IsAttacking = true;
+            IsWalking = false;
+        }
+    }
+
+    private void HandleFireballAttack()
+    {
+        if (FireBallCooldown <= 0)
+        {
+            for (int i = 0; i < FireBallCount; i++)
+            {
+                var randomize = FireballSpawnPoint.position;
+
+                randomize.y += Random.Range(-2f, 2f);
+
+                Instantiate(FireballPrefab, randomize, Quaternion.identity);
+            }
+
+            FireBallCooldown = 3f;
+        }
+        else
+        {
+            FireBallCooldown -= Time.fixedDeltaTime;
+        }
+    }
+
+
+    private void UpdateAnimator()
+    {
+        if (IsWalking)
+        {
+            animator.SetTrigger("walk");
+        }
+        else
+        {
+            animator.ResetTrigger("walk");
+        }
+
+        if (IsAttacking)
+        {
+            animator.SetTrigger("attack"); ;
+        }
+        else
+        {
+            animator.ResetTrigger("attack");
+        }
+        
+    }
+
+    new public void TakeDamage(float damage)
+    {
+        currentHp -= damage;
+    }
+
+    //private IEnumerator AttackBySkillNo1()
+    //{
+    //    this.enabled = false;
+    //    isRunning = false;
+    //    isAttackSkill = true;
+    //    UpdateAnimator();
+    //    yield return null;
+
+    //    // Đợi 1 frame để Unity cập nhật animator
+    //    yield return null;
+
+    //    // Chờ animation "TreeSkill1" bắt đầu
+    //    yield return new WaitUntil(() => animator.GetCurrentAnimatorStateInfo(0).IsName("TreeSkill1"));
+
+
+
+    //    int loopCount = 0;
+    //    while (loopCount < loopSkill1)
+    //    {
+    //        // Chờ cho animation kết thúc 1 lần
+    //        yield return new WaitUntil(() => animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f);
+
+    //        loopCount++;
+
+
+    //        // Reset animation để loop lại
+    //        animator.Play("TreeSkill1", 0, 0f);
+    //    }
+
+    //    Vector3 directionPlayer = (PlayerObject.transform.position - FireballSpawnPoint.position).normalized;
+    //    GameObject bullet = Instantiate(FireballPrefab, FireballSpawnPoint.position, Quaternion.identity);
+
+    //    EnemyBullet enemyBullet = bullet.GetComponent<EnemyBullet>();
+
+    //    enemyBullet.SetMoveDirection(directionPlayer * speed);
+    //    audioBoss.PlaySkillNo1Clip();
+
+
+    //    this.enabled = true;
+    //    isAttackSkill = false;
+    //    isRunning = true;
+    //    UpdateAnimator();
+    //}
+    //private IEnumerator AttackNormal()
+    //{
+    //    this.enabled = false;
+    //    isRunning = false;
+    //    isAttackNormal = true;
+    //    UpdateAnimator();
+
+    //    // Đợi 1 frame để Unity cập nhật animation
+    //    yield return null;
+
+    //    Vector3 originalPosition = attackPoint.position; // Lưu vị trí gốc
+    //    float attackOffset = 1.5f;
+
+    //    // Xác định hướng dựa trên transform.localScale.x
+    //    int direction = transform.localScale.x > 0 ? 1 : -1; // Nếu đang nhìn phải → 1, nếu đang nhìn trái → -1
+
+    //    int i = 0;
+    //    while (i < loopNormal)
+    //    {
+    //        i++;
+    //        // Chờ cho animation kết thúc mỗi lần
+    //        yield return new WaitUntil(() => animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f);
+
+    //        // Tạo attack tại vị trí mới
+    //        GameObject attack = Instantiate(attackNormalPrefabs, attackPoint.position, Quaternion.identity);
+
+    //        // Dịch chuyển attackPoint theo hướng enemy đang quay mặt
+    //        attackPoint.position += new Vector3(direction * attackOffset, 0, 0);
+    //    }
+
+    //    // Khôi phục vị trí attackPoint sau khi hoàn tất
+    //    attackPoint.position = originalPosition;
+    //    audioBoss.PlayNormalSkill();
+    //    this.enabled = true;
+    //    isAttackNormal = false;
+    //    isRunning = true;
+    //    UpdateAnimator();
+    //}
+
+
+
+
+    //private IEnumerator StopMovement()
+    //{
+    //    audioBoss.PlayIdlerClip();
+    //    isRunning = false;
+    //    UpdateAnimator();
+    //    yield return new WaitForSeconds(2f);
+
+    //    isRunning = true;
+    //    UpdateAnimator();
+    //    HandleMovement();
+    //}
+    //private void BerserkMode()
+    //{
+    //    if (!isBreakerTime)
+    //    {
+    //        audioBoss.PlayBreakerClip();
+    //        nextAttackTime -= skillCooldown;
+    //        isBreakerTime = true;
+
+    //        loopSkill1 -= 3;
+    //        loopNormal += 3;
+    //        skillCooldown -= 2.5f;
+    //    }
+    //    else
+    //    {
+
+    //        loopSkill1 += 3;
+    //        loopNormal -= 3;
+    //        skillCooldown += 2.5f;
+    //        isBreakerTime = false;
+    //    }
+
+
+    //}
+
+    ////random
+    //private int[] weightedValues = { 0, 0, 0, 0, 1, 1, 1, 1, 3, 3, 3, 3, 2 };
+    //private bool isInBreakerTime = false;
+
+    //private int GetWeightedRandom()
+    //{
+    //    if (weightedValues.Length == 0) return 0; // Đề phòng mảng bị rỗng
+
+    //    int index = Random.Range(0, weightedValues.Length); // Luôn chọn index hợp lệ
+    //    int randomValue = weightedValues[index];
+
+    //    if (randomValue == 3 && !isInBreakerTime)
+    //    {
+    //        StartCoroutine(MultipleAttacking());
+    //    }
+
+    //    return randomValue;
+    //}
+
+    //private IEnumerator MultipleAttacking()
+    //{
+    //    isInBreakerTime = true;
+
+    //    // Loại bỏ số 3 bằng danh sách mới
+    //    weightedValues = new int[] { 0, 0, 0, 1, 1, 1, 2 };
+
+    //    yield return new WaitForSeconds(breakerTime);
+
+    //    // Khôi phục danh sách sau breaker
+    //    weightedValues = new int[] { 0, 0, 0, 1, 1, 1, 2, 3, 3, 3, 3, 3 };
+    //    isInBreakerTime = false;
+    //}
+
+    //private void RandomAttack()
+    //{
+    //    FacePlayer();
+    //    //int random = 1;
+    //    int random = GetWeightedRandom();
+
+
+    //    switch (random)
+    //    {
+    //        case 0:
+    //            {
+    //                Debug.Log("danh thuong");
+    //                StartCoroutine(AttackNormal());
+
+    //                break;
+    //            }
+    //        case 1:
+    //            {
+    //                Debug.Log("skill 1");
+    //                StartCoroutine(AttackBySkillNo1());
+
+    //                break;
+    //            }
+    //        case 2:
+    //            {
+    //                Debug.Log("dung yen");
+    //                StartCoroutine(StopMovement());
+    //                break;
+    //            }
+    //        case 3:
+    //            {
+    //                Debug.Log("bkreaer");
+    //                BerserkMode();
+    //                break;
+    //            }
+
+
+    //    }
+    //}
+    //private void UseSkillTime()
+    //{
+    //    nextAttackTime = Time.time + skillCooldown;
+    //    RandomAttack();
+    //}
+    //private void FacePlayer()
+    //{
+    //    if (PlayerObject == null) return;
+
+    //    float direction = PlayerObject.transform.position.x - transform.position.x;
+
+    //    if (direction > 0)
+    //    {
+    //        // Player ở bên phải -> Quay sang phải
+    //        transform.localScale = new Vector3(-1, transform.localScale.y, transform.localScale.z);
+    //    }
+    //    else if (direction < 0)
+    //    {
+    //        // Player ở bên trái -> Quay sang trái
+    //        transform.localScale = new Vector3(1, transform.localScale.y, transform.localScale.z);
+    //    }
+    //}
+
+
+    //private void OnTriggerEnter2D(Collider2D collision)
+    //{
+    //    if (collision.CompareTag("Player"))
+    //    {
+    //        PlayerObject.GetComponent<PlayerController>()
+    //       .TakeDamage(1f);
+    //    }
+    //}
+    //private void HandleMovement()
+    //{
+    //    if (!isRunning) return;
+    //    isRunning = true;
+    //    UpdateAnimator();
+    //    float leftBound = startPos.x - distance;
+    //    float rightBound = startPos.x + distance;
+
+    //    if (movingRight)
+    //    {
+    //        transform.Translate(Vector2.right * speed * Time.deltaTime);
+    //        if (transform.position.x >= rightBound)
+    //        {
+    //            movingRight = false; // Đổi hướng khi chạm biên phải
+    //        }
+    //    }
+    //    else
+    //    {
+    //        transform.Translate(Vector2.left * speed * Time.deltaTime);
+    //        if (transform.position.x <= leftBound)
+    //        {
+    //            movingRight = true; // Đổi hướng khi chạm biên trái
+    //        }
+    //    }
+    //}
+    //private void FlipEnemy()
+    //{
+    //    transform.localScale = new Vector3(movingRight ? 1 : -1, 1, 1);
+    //}
+    //private void Die()
+    //{
+    //    audioBoss.PlayDieClip();
+    //}
+}

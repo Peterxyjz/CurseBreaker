@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 public class Sword : MonoBehaviour
 {
     private BoxCollider2D attackCollider;
@@ -9,7 +10,8 @@ public class Sword : MonoBehaviour
     [SerializeField] private Vector2 attackSize = new Vector2(1.5f, 1f);
     [SerializeField] private LayerMask enemyLayer;
     [SerializeField] private GameObject attackEffect;
-
+    private float attackDamageSword = 0f;
+    private float attackDamgePlayer = 0f;
     public Transform player;
     public Vector3 offsetRight = new Vector3(0.5f, 0, 0);
     public Vector3 offsetLeft = new Vector3(-0.5f, 0, 0);
@@ -64,25 +66,32 @@ public class Sword : MonoBehaviour
     public void PerformAttack(float damage)
     {
         attackCollider.enabled = true; // Bật Collider để phát hiện va chạm
-
+        attackDamgePlayer = damage;
         StartCoroutine(DelayedAttackEffect()); // Gọi Coroutine để trì hoãn hiệu ứng
 
         DrawAttackBox(); // Hiển thị vùng tấn công bằng LineRenderer
 
-        //// Kiểm tra kẻ địch trúng đòn
-        //Collider2D[] hitEnemies = Physics2D.OverlapBoxAll(transform.position, attackSize, 0, enemyLayer);
-        //foreach (Collider2D enemy in hitEnemies)
-        //{
-        //    if (enemy.CompareTag("Enemy"))
-        //    {
-        //        Enemy enemyController = enemy.GetComponent<Enemy>();
-        //        if (enemyController != null)
-        //        {
-        //            enemyController.TakeDamage(damage);
-        //            Debug.Log("🗡 Gây sát thương cho " + enemy.gameObject.name);
-        //        }
-        //    }
-        //}
+        // Kiểm tra kẻ địch trúng đòn
+        Collider2D[] hitEnemies = Physics2D.OverlapBoxAll(transform.position, attackSize, 0, enemyLayer);
+        
+        Debug.Log($"{hitEnemies.Length}");
+
+        foreach (Collider2D enemy in hitEnemies)
+        {
+            if (enemy.CompareTag("Enemy"))
+            {
+                Enemy enemyController = enemy.GetComponent<Enemy>();
+                if (enemyController != null)
+                {
+                    enemyController.TakeDamage(damage);
+                    Debug.Log("🗡 Gây sát thương cho " + enemy.gameObject.name + ":" + damage);
+                }
+                else
+                {
+                    Debug.Log("laaa");
+                }
+            }
+        }
 
         Invoke(nameof(DisableAttack), attackDuration);
     }
@@ -129,7 +138,7 @@ public class Sword : MonoBehaviour
             Enemy enemyController = collision.GetComponent<Enemy>();
             if (enemyController != null)
             {
-                enemyController.TakeDamage(1f);
+                enemyController.TakeDamage(attackDamgePlayer + attackDamageSword);
                 Debug.Log("🗡 Gây sát thương cho " + collision.gameObject.name);
             }
         }

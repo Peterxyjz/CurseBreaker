@@ -39,7 +39,7 @@ public class PlayerCollection : MonoBehaviour
         else if (collision.CompareTag("Trap"))
         {
             player.TakeDamage(1f);
-            Debug.Log("tru mau");
+            Debug.Log("tru mau = trap");
         }else if (collision.CompareTag("GroundDie"))
         {
             player.GoToGroundDie();
