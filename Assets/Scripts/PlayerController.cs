@@ -72,7 +72,7 @@ public class PlayerController : MonoBehaviour
         gameManager = FindAnyObjectByType<GameManager>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         audioManager = FindAnyObjectByType<AudioManager>();
-
+        skill2Effect.SetActive(false);
 
     }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -337,12 +337,13 @@ public class PlayerController : MonoBehaviour
         //DisableColliders();
         DisableMovement(5f);
         FadeOutAndDestroy();
-        Invoke(nameof(CallGameOver), 1.5f);
+        CallGameOver();
 
     }
     private void CallGameOver()
     {
         gameManager.GameOver();
+        Debug.Log("done call Game OVer");
     }
     private void UpdateHpBar()
     {

@@ -42,6 +42,7 @@ public class PlayerCollection : MonoBehaviour
             Debug.Log("tru mau = trap");
         }else if (collision.CompareTag("GroundDie"))
         {
+            Debug.Log("out map");
             player.GoToGroundDie();
         }
     }
