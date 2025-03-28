@@ -21,10 +21,11 @@ public class GameManager : MonoBehaviour
     {
 
         Time.timeScale = 0; // Ngừng game
-        if (gameOverUi != null)
-        {
-            gameOverUi.SetActive(true);
-        }
+       
+            gameOverUi.gameObject.SetActive(true);
+        
+        Debug.Log($"gameui: {gameOverUi.active}");
+        Debug.Log($"gameui != null: {gameOverUi != null}");
     }
 
     public void PlayAgainGame()

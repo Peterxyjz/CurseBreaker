@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class FireballScript : MonoBehaviour
 {
@@ -41,6 +41,22 @@ public class FireballScript : MonoBehaviour
 
         if (FireballLivingTime <= 0)
         {
+            Destroy(gameObject);
+        }
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            // Lấy script PlayerScript (hoặc tên script khác) trên Player
+            var playerScript = collision.GetComponent<PlayerController>();
+            if (playerScript != null)
+            {
+                // Gọi hàm TakeDamage của Player
+                playerScript.TakeDamage(1f);
+            }
+
+            // Huỷ Fireball sau khi gây sát thương
             Destroy(gameObject);
         }
     }

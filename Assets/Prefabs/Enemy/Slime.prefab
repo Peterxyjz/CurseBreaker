@@ -116,6 +116,7 @@ GameObject:
   - component: {fileID: 2070658773500858658}
   - component: {fileID: 703289458620788112}
   - component: {fileID: 3185311409356202748}
+  - component: {fileID: -5520385976266334111}
   m_Layer: 0
   m_Name: Slime
   m_TagString: Enemy
@@ -181,7 +182,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -981835587
-  m_SortingLayer: 7
+  m_SortingLayer: 8
   m_SortingOrder: 0
   m_Sprite: {fileID: 9222464284174795514, guid: f0f32125973da474c8737e23a463413a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -279,6 +280,33 @@ MonoBehaviour:
   maxHp: 2
   hpBar: {fileID: 8625115832119889461}
   distance: 6
+--- !u!50 &-5520385976266334111
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3621927088544658595}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4
 --- !u!1 &3801838660639379139
 GameObject:
   m_ObjectHideFlags: 0

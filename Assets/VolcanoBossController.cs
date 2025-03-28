@@ -3,470 +3,372 @@ using UnityEngine;
 
 public class VolcanoBossController : Enemy
 {
-
-    [SerializeField] private float distance = 10f;
-    [SerializeField] private GameObject attackNormalPrefabs;
-    [SerializeField] private Transform attackPoint;
-    [SerializeField] private GameObject PlayerObject;
-
-    //private float speed = 5f;
-    //private bool movingRight = true;
-    //private float nextAttackTime;
-    //private bool isRunning;
-    //private bool isAttackNormal;
-    //private bool isAttackSkill;
-    //private bool isBreakerTime = false;
-    //private int loopSkill1 = 5;
-    //private int loopNormal = 3;
-    //private float breakerTime = 10f;
+    private float distance = 30f; // phạm vi phát hiện player
+    public SpaceGate spaceGate;
 
     [SerializeField] private GameObject FireballPrefab;
     [SerializeField] private Transform FireballSpawnPoint;
-    [SerializeField] private float FireBallCooldown = 4f;
-    private int FireBallCount = 10;
-
+    private float FireBallCooldown = 4f; // cooldown
+    private int FireBallCount = 3;
+    public GameObject circleMagic;
     private Vector3 startPos;
 
     private Rigidbody2D BossRigidBody;
     private Animator animator;
     private AudioBoss audioBoss;
 
-    
     private bool IsFacingLeft = true;
-    [SerializeField] private bool IsWalking = true;
+    private bool isRunning = false;
     private bool IsSprinting = false;
     private float MovementSpeed = 5f;
     private float JumpStrength = 2f;
     private float SprintMultiplier = 1.75f;
+    private bool isBerserMode = false;
 
-    [SerializeField] private bool IsAttacking = false;
+    private bool isAttacking = false;
+    private bool isHit = false;
+    private bool isEnrage = false;
     private float AttackDamage = 1f;
+
+    // Thêm biến cho cooldown tấn công (2s)
+    private float attackCooldownTimer = 0f;
+    private float attackCooldonwTimerReset = 3f;
 
     Vector2 MovementVector;
 
-    private void Awake()
-    {
-        currentHp = 10f;
-    }
+    [SerializeField] private Collider2D attackRangeCollider;
 
     void Start()
     {
+        base.Start();
+        spaceGate.gameObject.SetActive(false);
+        circleMagic.SetActive(false);
         startPos = transform.position;
         BossRigidBody = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         audioBoss = FindAnyObjectByType<AudioBoss>();
+        StartCoroutine(FireballAttackRoutine());
+        if (attackRangeCollider != null)
+            attackRangeCollider.enabled = false;
     }
 
     void Update()
     {
-
-        UpdateAnimator();
-        //if (Time.time >= nextAttackTime)
-        //{
-        //    UseSkillTime();
-        //}
-
-    }
-
-    private void FixedUpdate()
-    {
-        HandleMeleeAttack();
-        HandleFireballAttack();
-        HandleMovement();
-    }
-
-    void CheckEnrage()
-    {
-        if (currentHp <= 1500)
+        // Tính khoảng cách giữa player và boss theo trục X
+        float playerDistance = Mathf.Abs(player.transform.position.x - transform.position.x);
+        if (isEnrage || isDying)
         {
-            IsSprinting = true;
-            AttackDamage = 1.5f;
+            BossRigidBody.linearVelocity = Vector2.zero;
+            return;
         }
-    }
-
-    public void TakeDamage(int damage)
-    {
-        currentHp -= damage;
-        Debug.Log(damage);
-
-        if (currentHp <= 200)
+            
+        // Nếu player nằm trong vùng phát hiện
+        if (!isAttacking && playerDistance <= distance)
         {
-            GetComponent<Animator>().SetBool("IsEnraged", true);
-        }
+            FacePlayer();
 
-        if (currentHp <= 0)
+            // Nếu player chưa quá gần (khoảng cách > 3f) thì di chuyển tới player
+            if (playerDistance > 3f)
+            {
+                isRunning = true;
+                HandleMovement();
+            }
+            // Khi player quá gần (<= 3f) thì tấn công nếu cooldown cho phép
+            else
+            {
+                
+                if (attackCooldownTimer <= 0f && !isAttacking)
+                {
+                    // Khởi chạy coroutine attack
+                    StartCoroutine(WaitForAttackAnimation());
+                    attackCooldownTimer = attackCooldonwTimerReset;
+                }
+            }
+        }
+        else
         {
-
+            // Có thể thêm logic boss trở về vị trí ban đầu hoặc dừng di chuyển
+            isRunning = false;
         }
-    }
 
-    public IEnumerator FinishAttack()
-    {
-        IsAttacking = false;
-        UpdateAnimator();
-        PlayerObject.GetComponent<PlayerController>().TakeDamage(AttackDamage);
-        yield return new WaitForSeconds(1f);   
-        IsWalking = true;
+        // Giảm cooldown theo thời gian
+        if (attackCooldownTimer > 0)
+            attackCooldownTimer -= Time.deltaTime;
 
         
     }
 
+    /// <summary>
+    /// Quay đầu về phía player
+    /// </summary>
     private void FacePlayer()
     {
-        if (PlayerObject.transform.position.x > transform.position.x)
+        if (player.transform.position.x > transform.position.x)
         {
             transform.localScale = new Vector3(-1, transform.localScale.y, transform.localScale.z);
             IsFacingLeft = false;
         }
-        else if (PlayerObject.transform.position.x < transform.position.x)
+        else if (player.transform.position.x < transform.position.x)
         {
             transform.localScale = new Vector3(1, transform.localScale.y, transform.localScale.z);
             IsFacingLeft = true;
         }
     }
 
+    /// <summary>
+    /// Di chuyển boss theo hướng player
+    /// </summary>
     private void HandleMovement()
     {
         float xVelocity = MovementSpeed * 10 * Time.fixedDeltaTime;
 
-        if (IsWalking)
+        // Nếu boss đang chạy thì có thể nhân tốc độ sprint
+        if (IsSprinting)
         {
             xVelocity *= SprintMultiplier;
-            FacePlayer();
         }
-        else
-        {
-            xVelocity = 0;
-        }
+
+        // Điều chỉnh hướng di chuyển dựa trên hướng quay mặt
         if (IsFacingLeft)
         {
             xVelocity *= -1;
         }
-        
-        float yVelocity = BossRigidBody.linearVelocityY;
 
+        float yVelocity = BossRigidBody.linearVelocity.y;
         MovementVector = new Vector2(xVelocity, yVelocity);
-
         BossRigidBody.linearVelocity = MovementVector;
+        UpdateAnimator();
     }
 
-    private void HandleMeleeAttack()
+    /// <summary>
+    /// Coroutine đợi animation attack và xử lý collider
+    /// </summary>
+    private IEnumerator WaitForAttackAnimation()
     {
-        float player_distance = Mathf.Abs(PlayerObject.transform.position.x - transform.position.x);
+        BossRigidBody.linearVelocity = Vector2.zero;
+        isAttacking = true;
+        isRunning = false;
+        UpdateAnimator();
 
-        Debug.Log(player_distance);
+        // Đợi một frame để đảm bảo trigger được xử lý
+        yield return null;
 
-        if (player_distance < 4.5f)
+        // Đợi cho đến khi animation attack (ví dụ "cleave") bắt đầu
+        while (!animator.GetCurrentAnimatorStateInfo(0).IsName("cleave"))
         {
-            IsAttacking = true;
-            IsWalking = false;
+            yield return null;
+        }
+        // Đợi cho đến khi animation attack đạt một thời điểm thích hợp (ví dụ normalizedTime < 0.1f)
+        while (animator.GetCurrentAnimatorStateInfo(0).IsName("cleave") &&
+               animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.5f)
+        {
+            yield return null;
+        }
+
+        // Kích hoạt collider để xác định trúng đòn
+        if (attackRangeCollider != null)
+            attackRangeCollider.enabled = true;
+        while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.9f)
+        {
+            yield return null;
+        }
+
+        // Sau khi animation cleave gần kết thúc, chờ cho đến khi animator chuyển sang state khác (đang trong transition)
+        while (animator.IsInTransition(0))
+        {
+            yield return null;
+        }
+        // Gọi coroutine hoàn tất tấn công
+        FinishAttack();
+    }
+
+    /// <summary>
+    /// Sau khi attack xong: tắt collider và reset trạng thái tấn công
+    /// </summary>
+    public void FinishAttack()
+    {
+        if (attackRangeCollider != null)
+            attackRangeCollider.enabled = false;
+        isAttacking = false;
+        Debug.Log("tat collider");
+        UpdateAnimator();
+        
+    }
+
+    /// <summary>
+    /// Xử lý tấn công Fireball (nếu cần)
+    /// </summary>
+    private IEnumerator FireballAttackRoutine()
+    {
+        while (!isDying)  // Chạy liên tục cho đến khi boss chết
+        {
+            // Chờ FireBallCooldown giây
+            yield return new WaitForSeconds(FireBallCooldown);
+
+            // Thực hiện tấn công Fireball
+            HandleFireballAttack();
         }
     }
 
     private void HandleFireballAttack()
     {
-        if (FireBallCooldown <= 0)
+        for (int i = 0; i < FireBallCount; i++)
         {
-            for (int i = 0; i < FireBallCount; i++)
-            {
-                var randomize = FireballSpawnPoint.position;
-
-                randomize.y += Random.Range(-2f, 2f);
-
-                Instantiate(FireballPrefab, randomize, Quaternion.identity);
-            }
-
-            FireBallCooldown = 3f;
+            Vector3 spawnPos = FireballSpawnPoint.position;
+            spawnPos.y += Random.Range(-2f, 2f);
+            Instantiate(FireballPrefab, spawnPos, Quaternion.identity);
         }
-        else
-        {
-            FireBallCooldown -= Time.fixedDeltaTime;
-        }
+
+       
     }
 
-
+    /// <summary>
+    /// Cập nhật trạng thái animation dựa trên trạng thái của boss
+    /// </summary>
     private void UpdateAnimator()
     {
-        if (IsWalking)
+        animator.SetBool("isAttacking", isAttacking);
+        animator.SetBool("isRunning", isRunning);
+        animator.SetBool("isDying", isDying);
+        animator.SetBool("isHit", isHit);
+        animator.SetBool("isEnrage", isEnrage);
+    }
+
+    /// <summary>
+    /// Khi boss nhận dame, chuyển sang trạng thái Berser mode nếu hp dưới 50%
+    /// </summary>
+    public override void TakeDamage(float damage)
+    {
+        if (isDying) return;
+        currentHp -= damage;
+        currentHp = Mathf.Max(currentHp, 0);
+        UpdateHpBar();
+
+        if (!isBerserMode && currentHp <= maxHp * 0.5f)
         {
-            animator.SetTrigger("walk");
-        }
-        else
-        {
-            animator.ResetTrigger("walk");
+
+            isBerserMode = true;
+            StartCoroutine(StartBerserMode());
         }
 
-        if (IsAttacking)
+        if (currentHp <= 0f)
         {
-            animator.SetTrigger("attack"); ;
+            StartCoroutine(Die());
         }
-        else
-        {
-            animator.ResetTrigger("attack");
-        }
+        StartCoroutine(StartIsHit());
         
     }
-
-    new public void TakeDamage(float damage)
+    private IEnumerator StartIsHit()
     {
-        currentHp -= damage;
+        isHit = true;
+        UpdateAnimator();
+
+        // Chờ cho đến khi animation hit bắt đầu
+        while (!animator.GetCurrentAnimatorStateInfo(0).IsName("hit"))
+        {
+            yield return null;
+        }
+
+        // Chờ cho đến khi animation hit hoàn toàn kết thúc (normalizedTime đạt 1)
+        while (animator.GetCurrentAnimatorStateInfo(0).IsName("hit") &&
+               animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f)
+        {
+            yield return null;
+        }
+
+        isHit = false;
+        UpdateAnimator();
+    }
+    private IEnumerator StartBerserMode()
+    {
+      
+        MovementSpeed *= 2f;
+        AttackDamage += 0.25f;
+        FireBallCooldown -= 2f;
+        attackCooldonwTimerReset -= 2.5f;
+        FireBallCount += 7;
+        circleMagic.SetActive(true);
+        isEnrage = true;
+        isAttacking = false;
+        isRunning = false;
+        animator.SetFloat("cleaveSpeed", 2f);
+        UpdateAnimator();
+        while (!animator.GetCurrentAnimatorStateInfo(0).IsName("enrage"))
+        {
+            yield return null;
+        }
+
+        // Chờ cho đến khi animation "enrage" hoàn thành (normalizedTime đạt 1)
+        while (animator.GetCurrentAnimatorStateInfo(0).IsName("enrage") &&
+               animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f)
+        {
+            yield return null;
+        }
+        Debug.Log("kethuc enrage"); 
+        // Kết thúc trạng thái enrage
+        isEnrage = false;
+        UpdateAnimator();
     }
 
-    //private IEnumerator AttackBySkillNo1()
-    //{
-    //    this.enabled = false;
-    //    isRunning = false;
-    //    isAttackSkill = true;
-    //    UpdateAnimator();
-    //    yield return null;
-
-    //    // Đợi 1 frame để Unity cập nhật animator
-    //    yield return null;
-
-    //    // Chờ animation "TreeSkill1" bắt đầu
-    //    yield return new WaitUntil(() => animator.GetCurrentAnimatorStateInfo(0).IsName("TreeSkill1"));
 
 
-
-    //    int loopCount = 0;
-    //    while (loopCount < loopSkill1)
-    //    {
-    //        // Chờ cho animation kết thúc 1 lần
-    //        yield return new WaitUntil(() => animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f);
-
-    //        loopCount++;
-
-
-    //        // Reset animation để loop lại
-    //        animator.Play("TreeSkill1", 0, 0f);
-    //    }
-
-    //    Vector3 directionPlayer = (PlayerObject.transform.position - FireballSpawnPoint.position).normalized;
-    //    GameObject bullet = Instantiate(FireballPrefab, FireballSpawnPoint.position, Quaternion.identity);
-
-    //    EnemyBullet enemyBullet = bullet.GetComponent<EnemyBullet>();
-
-    //    enemyBullet.SetMoveDirection(directionPlayer * speed);
-    //    audioBoss.PlaySkillNo1Clip();
+    public float GetAttackDamage()
+    {
+        return AttackDamage; // trả về dame của boss cho bên gây dame
+    }
+    private  IEnumerator Die()
+    {
+        circleMagic.gameObject.SetActive(false);
+        isDying = true;
+        UpdateAnimator();
+        yield return null;
 
 
-    //    this.enabled = true;
-    //    isAttackSkill = false;
-    //    isRunning = true;
-    //    UpdateAnimator();
-    //}
-    //private IEnumerator AttackNormal()
-    //{
-    //    this.enabled = false;
-    //    isRunning = false;
-    //    isAttackNormal = true;
-    //    UpdateAnimator();
+        while (!animator.GetCurrentAnimatorStateInfo(0).IsName("death"))
+        {
+            yield return null;
+        }
 
-    //    // Đợi 1 frame để Unity cập nhật animation
-    //    yield return null;
+        while (animator.GetCurrentAnimatorStateInfo(0).IsName("death") &&
+               animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f)
+        {
+            yield return null;
+        }
+        spaceGate.gameObject.SetActive(true);
+        StartCoroutine(FadeOutAndDestroy());
+        DisableColliders();
+    }
+    private IEnumerator FadeOutAndDestroy()
+    {
+        SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
 
-    //    Vector3 originalPosition = attackPoint.position; // Lưu vị trí gốc
-    //    float attackOffset = 1.5f;
+        if (spriteRenderer != null)
+        {
+            float fadeDuration = 1f;
+            float timeElapsed = 0f;
+            Color startColor = spriteRenderer.color;
 
-    //    // Xác định hướng dựa trên transform.localScale.x
-    //    int direction = transform.localScale.x > 0 ? 1 : -1; // Nếu đang nhìn phải → 1, nếu đang nhìn trái → -1
+            while (timeElapsed < fadeDuration)
+            {
+                timeElapsed += Time.deltaTime;
+                float alpha = Mathf.Lerp(1f, 0f, timeElapsed / fadeDuration);
+                spriteRenderer.color = new Color(startColor.r, startColor.g, startColor.b, alpha);
 
-    //    int i = 0;
-    //    while (i < loopNormal)
-    //    {
-    //        i++;
-    //        // Chờ cho animation kết thúc mỗi lần
-    //        yield return new WaitUntil(() => animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f);
+                yield return null;
+            }
+        }
 
-    //        // Tạo attack tại vị trí mới
-    //        GameObject attack = Instantiate(attackNormalPrefabs, attackPoint.position, Quaternion.identity);
+        Debug.Log(gameObject.name + " đã bị xóa!");
+        Destroy(gameObject);
+    }
+    private void DisableColliders()
+    {
+        Collider2D[] colliders = GetComponents<Collider2D>();
 
-    //        // Dịch chuyển attackPoint theo hướng enemy đang quay mặt
-    //        attackPoint.position += new Vector3(direction * attackOffset, 0, 0);
-    //    }
+        foreach (var collider in colliders)
+        {
+            collider.enabled = false;
+        }
+    }
 
-    //    // Khôi phục vị trí attackPoint sau khi hoàn tất
-    //    attackPoint.position = originalPosition;
-    //    audioBoss.PlayNormalSkill();
-    //    this.enabled = true;
-    //    isAttackNormal = false;
-    //    isRunning = true;
-    //    UpdateAnimator();
-    //}
-
-
-
-
-    //private IEnumerator StopMovement()
-    //{
-    //    audioBoss.PlayIdlerClip();
-    //    isRunning = false;
-    //    UpdateAnimator();
-    //    yield return new WaitForSeconds(2f);
-
-    //    isRunning = true;
-    //    UpdateAnimator();
-    //    HandleMovement();
-    //}
-    //private void BerserkMode()
-    //{
-    //    if (!isBreakerTime)
-    //    {
-    //        audioBoss.PlayBreakerClip();
-    //        nextAttackTime -= skillCooldown;
-    //        isBreakerTime = true;
-
-    //        loopSkill1 -= 3;
-    //        loopNormal += 3;
-    //        skillCooldown -= 2.5f;
-    //    }
-    //    else
-    //    {
-
-    //        loopSkill1 += 3;
-    //        loopNormal -= 3;
-    //        skillCooldown += 2.5f;
-    //        isBreakerTime = false;
-    //    }
-
-
-    //}
-
-    ////random
-    //private int[] weightedValues = { 0, 0, 0, 0, 1, 1, 1, 1, 3, 3, 3, 3, 2 };
-    //private bool isInBreakerTime = false;
-
-    //private int GetWeightedRandom()
-    //{
-    //    if (weightedValues.Length == 0) return 0; // Đề phòng mảng bị rỗng
-
-    //    int index = Random.Range(0, weightedValues.Length); // Luôn chọn index hợp lệ
-    //    int randomValue = weightedValues[index];
-
-    //    if (randomValue == 3 && !isInBreakerTime)
-    //    {
-    //        StartCoroutine(MultipleAttacking());
-    //    }
-
-    //    return randomValue;
-    //}
-
-    //private IEnumerator MultipleAttacking()
-    //{
-    //    isInBreakerTime = true;
-
-    //    // Loại bỏ số 3 bằng danh sách mới
-    //    weightedValues = new int[] { 0, 0, 0, 1, 1, 1, 2 };
-
-    //    yield return new WaitForSeconds(breakerTime);
-
-    //    // Khôi phục danh sách sau breaker
-    //    weightedValues = new int[] { 0, 0, 0, 1, 1, 1, 2, 3, 3, 3, 3, 3 };
-    //    isInBreakerTime = false;
-    //}
-
-    //private void RandomAttack()
-    //{
-    //    FacePlayer();
-    //    //int random = 1;
-    //    int random = GetWeightedRandom();
-
-
-    //    switch (random)
-    //    {
-    //        case 0:
-    //            {
-    //                Debug.Log("danh thuong");
-    //                StartCoroutine(AttackNormal());
-
-    //                break;
-    //            }
-    //        case 1:
-    //            {
-    //                Debug.Log("skill 1");
-    //                StartCoroutine(AttackBySkillNo1());
-
-    //                break;
-    //            }
-    //        case 2:
-    //            {
-    //                Debug.Log("dung yen");
-    //                StartCoroutine(StopMovement());
-    //                break;
-    //            }
-    //        case 3:
-    //            {
-    //                Debug.Log("bkreaer");
-    //                BerserkMode();
-    //                break;
-    //            }
-
-
-    //    }
-    //}
-    //private void UseSkillTime()
-    //{
-    //    nextAttackTime = Time.time + skillCooldown;
-    //    RandomAttack();
-    //}
-    //private void FacePlayer()
-    //{
-    //    if (PlayerObject == null) return;
-
-    //    float direction = PlayerObject.transform.position.x - transform.position.x;
-
-    //    if (direction > 0)
-    //    {
-    //        // Player ở bên phải -> Quay sang phải
-    //        transform.localScale = new Vector3(-1, transform.localScale.y, transform.localScale.z);
-    //    }
-    //    else if (direction < 0)
-    //    {
-    //        // Player ở bên trái -> Quay sang trái
-    //        transform.localScale = new Vector3(1, transform.localScale.y, transform.localScale.z);
-    //    }
-    //}
-
-
-    //private void OnTriggerEnter2D(Collider2D collision)
-    //{
-    //    if (collision.CompareTag("Player"))
-    //    {
-    //        PlayerObject.GetComponent<PlayerController>()
-    //       .TakeDamage(1f);
-    //    }
-    //}
-    //private void HandleMovement()
-    //{
-    //    if (!isRunning) return;
-    //    isRunning = true;
-    //    UpdateAnimator();
-    //    float leftBound = startPos.x - distance;
-    //    float rightBound = startPos.x + distance;
-
-    //    if (movingRight)
-    //    {
-    //        transform.Translate(Vector2.right * speed * Time.deltaTime);
-    //        if (transform.position.x >= rightBound)
-    //        {
-    //            movingRight = false; // Đổi hướng khi chạm biên phải
-    //        }
-    //    }
-    //    else
-    //    {
-    //        transform.Translate(Vector2.left * speed * Time.deltaTime);
-    //        if (transform.position.x <= leftBound)
-    //        {
-    //            movingRight = true; // Đổi hướng khi chạm biên trái
-    //        }
-    //    }
-    //}
-    //private void FlipEnemy()
-    //{
-    //    transform.localScale = new Vector3(movingRight ? 1 : -1, 1, 1);
-    //}
-    //private void Die()
-    //{
-    //    audioBoss.PlayDieClip();
-    //}
 }

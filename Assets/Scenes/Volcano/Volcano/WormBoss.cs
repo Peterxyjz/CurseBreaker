@@ -1,129 +1,155 @@
 ﻿using UnityEngine;
-
+using System.Collections;
 public class WormBoss : Enemy
 {
-    const string ANIMATION_BOOL_WALKING = "isWalking";
-    const string ANIMATION_TRIGGER_ATTACKING = "bossAttack";
-
-    public float moveSpeed = 2f;   // Tốc độ di chuyển của boss
-    public Transform attackPosition; // Vị trí boss sẽ đến trước khi tấn công
-    public float attackRange = 2f; // Phạm vi tấn công người chơi
-    public GameObject? weaponDrop;
+    private float detectionRange = 15f;
+    private float attackRange = 2f;
+    private float chaseSpeed = 2f;
+    [SerializeField] private Collider2D attackRangeCollider;
+    private bool isChasing = false;
 
     private Animator animator;
-    private bool hasReachedPosition = false; 
+    private bool isRunning = false;
     private bool isAttacking = false;
-    private bool isDead = false;
-    private bool isStarting = false;
-    private bool isPlayerInAttackRange = false;
-    //private float distanceToPlayer = 0f;
-
+    private bool isDie = false;
+    public GameObject gift;
+    public NPCVolcano npc;
     protected override void Start()
     {
         base.Start();
-        //player = GameObject.FindGameObjectWithTag("Player").transform;
+        npc.gameObject.SetActive(false);
         animator = GetComponent<Animator>();
+
+        gift.SetActive(false);
+
+        if (attackRangeCollider != null)
+            attackRangeCollider.enabled = false;
     }
 
-    void Update()
+    private void Update()
     {
-        FlipTowardsPlayer();
-        if (isDead) return;
+        if (player == null || isDie) return;
 
-        CheckPlayerDistance();
-
-        if (isPlayerInAttackRange && !isAttacking)
+        if (isAttacking)
         {
-            AttackPlayer();
-        }
-        else
-        {
-            HandleMovement();
-
+            return;
         }
 
-    }
+        float distanceToPlayer = Vector2.Distance(transform.position, player.transform.position);
 
-    private void CheckPlayerDistance()
-    {
-        if (Vector2.Distance(transform.position, player.transform.position) > attackRange)
+        isChasing = (distanceToPlayer <= detectionRange);
+
+        if (isChasing)
         {
-            isPlayerInAttackRange = false;
+            isRunning = true;
+            MoveTowardsPlayer();
+            setAnimator();
 
-        }
-        else
-        {
-            isPlayerInAttackRange = true;
-
-        }
-    }
-
-    protected override void HandleMovement()
-    {
-        var distanceToPlayer = Vector2.Distance(transform.position, player.transform.position);
-        Debug.Log(distanceToPlayer);
-        if (distanceToPlayer > attackRange - 0.5f)
-        {
-            transform.position = Vector2.MoveTowards(transform.position, player.transform.position, moveSpeed * Time.deltaTime);
-
-            animator.SetBool(ANIMATION_BOOL_WALKING, true);
-
-        }
-        else
-        {
-            animator.SetBool(ANIMATION_BOOL_WALKING, false);
+            if (distanceToPlayer <= attackRange)
+            {
+                AttackPlayer();
+            }
         }
     }
 
-    void AttackPlayer()
+    private void MoveTowardsPlayer()
     {
-        if (Vector2.Distance(transform.position, player.transform.position) <= attackRange)
+        isRunning = true;
+        Vector2 targetPosition = new Vector2(player.transform.position.x, transform.position.y);
+        Vector2 direction = (targetPosition - (Vector2)transform.position).normalized;
+
+        transform.position = Vector2.MoveTowards(
+            transform.position,
+            targetPosition,
+            chaseSpeed * Time.deltaTime
+        );
+        FlipEnemy(direction);
+    }
+
+    private void AttackPlayer()
+    {
+        if (!isAttacking)
         {
+            isRunning = false;
             isAttacking = true;
-            animator.SetTrigger(ANIMATION_TRIGGER_ATTACKING);
-
-            // Gây sát thương lên người chơi (giả sử PlayerController có phương thức TakeDamage)
-            player.GetComponent<PlayerController>().TakeDamage(1f);
-
-            Invoke(nameof(EndAttack), 1.5f);
+            setAnimator();
+            if (attackRangeCollider != null)
+                attackRangeCollider.enabled = true;
+            StartCoroutine(WaitForAttackAnimation());
         }
     }
 
-    void EndAttack()
+    private IEnumerator WaitForAttackAnimation()
     {
+        yield return null;
+        while (!animator.GetCurrentAnimatorStateInfo(0).IsName("attackBoss"))
+        {
+            yield return null;
+        }
+        while (animator.GetCurrentAnimatorStateInfo(0).IsName("attackBoss") &&
+               animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f)
+        {
+            yield return null;
+        }
+        if (attackRangeCollider != null)
+            attackRangeCollider.enabled = false;
         isAttacking = false;
+        setAnimator();
     }
 
-
-
-    void Die()
+    private void FlipEnemy(Vector2 direction)
     {
-        isDead = true;
-        animator.SetTrigger("deathBoss");
-
-        // Sau khi boss chết, rơi ra vũ khí cho người chơi
-        if (weaponDrop != null)
+        if (direction.x > 0)
         {
-            Instantiate(weaponDrop, transform.position, Quaternion.identity);
+            transform.localScale = new Vector3(1, 1, 1);
         }
-
-        Destroy(gameObject, 2f); // Xóa boss sau 2 giây
+        else if (direction.x < 0)
+        {
+            transform.localScale = new Vector3(-1, 1, 1);
+        }
     }
-    void FlipTowardsPlayer()
+
+    private void setAnimator()
     {
-        if (player == null) return;
+        
+        animator.SetBool("isRunning", isRunning);
+        animator.SetBool("isAttacking", isAttacking);
+        animator.SetBool("isDie", isDie);
+    }
 
-        SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+    protected override void Die()
+    {
+        if (isDie) return;
+        isDie = true;
+        
+        
 
-        // Nếu người chơi ở bên trái boss, lật hình theo trục X
-        if (player.transform.position.x < transform.position.x)
+        this.enabled = false;
+        StartCoroutine(DisappearAfterDelay());
+    }
+
+    private IEnumerator DisappearAfterDelay()
+    {
+        animator.SetBool("isDie", true);
+       
+        while (!animator.GetCurrentAnimatorStateInfo(0).IsName("deathBoss"))
         {
-            spriteRenderer.flipX = true;
+            yield return null;
         }
-        else
+        while (animator.GetCurrentAnimatorStateInfo(0).IsName("deathBoss") &&
+               animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 1f)
         {
-            spriteRenderer.flipX = false;
+            yield return null;
         }
+        yield return new WaitForSeconds(0.5f);
+        gift.SetActive(true);
+        npc.gameObject.SetActive(true);
+        Destroy(gameObject);
+    }
+
+    public float GetAttackDamage()
+    {
+        return enemyDamage;
     }
 
 }
