@@ -45,5 +45,9 @@ public class PlayerCollection : MonoBehaviour
             Debug.Log("out map");
             player.GoToGroundDie();
         }
+        else if (collision.CompareTag("Artifact"))
+        {
+            Destroy(collision.gameObject);
+        }
     }
 }

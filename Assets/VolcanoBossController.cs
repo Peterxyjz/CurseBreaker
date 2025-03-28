@@ -12,7 +12,7 @@ public class VolcanoBossController : Enemy
     private int FireBallCount = 3;
     public GameObject circleMagic;
     private Vector3 startPos;
-
+    public GameObject artifact;
     private Rigidbody2D BossRigidBody;
     private Animator animator;
     private AudioBoss audioBoss;
@@ -42,6 +42,7 @@ public class VolcanoBossController : Enemy
     {
         base.Start();
         spaceGate.gameObject.SetActive(false);
+        artifact.gameObject.SetActive(false);
         circleMagic.SetActive(false);
         startPos = transform.position;
         BossRigidBody = GetComponent<Rigidbody2D>();
@@ -319,6 +320,7 @@ public class VolcanoBossController : Enemy
     private  IEnumerator Die()
     {
         circleMagic.gameObject.SetActive(false);
+        artifact.gameObject.SetActive(true);
         isDying = true;
         UpdateAnimator();
         yield return null;

@@ -14,9 +14,7 @@ public class TypewriterEffectOutro : MonoBehaviour
     public float delay = 0.0000000005f; // Điều chỉnh tốc độ gõ chữ
 
     private string[] textLines = {
-        "Đây là đoạn chữ đầu tiên...",
-        "Đây là đoạn chữ thứ hai...",
-        "Đây là đoạn chữ cuối cùng. Nhấn để tiếp tục!"
+       "Cuối cùng, sau những trận chiến sinh tử và vô vàn khó khăn, hiệp sĩ đã thu thập đủ các thánh di vật nằm rải rác nơi góc tối của vương quốc. Trong khoảnh khắc ánh sáng lóe lên từ mảnh ghép cuối cùng, một luồng năng lượng thanh tẩy bừng nở, dung hòa tất cả thành một bình thuốc giải thần kỳ. Chính lúc đó, lời nguyền đen tối của mụ phù thủy dần tan biến, trả lại sự sống và hy vọng cho muôn dân. Khắp vương quốc, tiếng reo hò vỡ òa, tôn vinh người anh hùng đã đánh đổi cả mạng sống để cứu lấy mảnh đất quê hương"
     };
     private int currentLine = 0;
     private bool isTyping = false; // Kiểm tra trạng thái gõ chữ

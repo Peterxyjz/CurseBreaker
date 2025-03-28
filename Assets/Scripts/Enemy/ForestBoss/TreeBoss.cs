@@ -24,6 +24,7 @@ public class TreeBoss : Enemy
     private int loopNormal = 3;
     private float breakerTime = 10f;
     private AudioBoss audioBoss;
+    public GameObject artifact;
     protected override void Start()
     {
         base.Start();
@@ -32,6 +33,7 @@ public class TreeBoss : Enemy
         animator = GetComponent<Animator>();
         audioBoss = FindAnyObjectByType<AudioBoss>();
         spaceGate.SetActive(false);
+        artifact.gameObject.SetActive(false);
     }
 
     void Update()
@@ -328,6 +330,7 @@ public class TreeBoss : Enemy
         base.Die();
         audioBoss.PlayDieClip();
         spaceGate.SetActive(true);
+        artifact.gameObject.SetActive(true);
     }
     private void UpdateAnimator()
     {

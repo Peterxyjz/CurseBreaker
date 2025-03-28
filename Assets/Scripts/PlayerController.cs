@@ -18,7 +18,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float attackCooldown = 1f; // Thời gian hồi chiêu
 
 
-
     private AudioManager audioManager;
     private float currentHp;
     private Rigidbody2D rb;
@@ -98,7 +97,7 @@ public class PlayerController : MonoBehaviour
         if (data != null)
         {
             maxHp = data.maxHp;
-            currentHp = data.currentHp;
+            currentHp = data.currentHp == 0f ? 5f : data.currentHp;
             damage = data.damage;
 
             // 🔄 Chuyển từ List<SkillData> -> Dictionary<string, bool>

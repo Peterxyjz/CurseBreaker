@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Game.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
   - enabled: 1
+    path: Assets/Scenes/Intro/Intro.unity
+    guid: efaf521f6b287db4b9c89e0fb27a93cb
+  - enabled: 1
     path: Assets/Scenes/Forest.unity
     guid: f4397a4042bb5ee49a04f622fe9d6c2b
   - enabled: 1
@@ -26,6 +29,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Volcano/VolcanoBoss/VolcanoBoss.unity
     guid: 5d0298224b5a5884cab2b79212667eb3
+  - enabled: 1
+    path: Assets/Scenes/Outro/Outro.unity
+    guid: 54d484b8773550d47850f96a7348a086
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

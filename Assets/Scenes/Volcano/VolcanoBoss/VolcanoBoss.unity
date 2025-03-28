@@ -4274,6 +4274,68 @@ Transform:
   - {fileID: 2007646632}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &1089861447
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 6655640153172724925, guid: 653ef58e7e8bc7140be19b4b212ed105, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 34.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 6655640153172724925, guid: 653ef58e7e8bc7140be19b4b212ed105, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6655640153172724925, guid: 653ef58e7e8bc7140be19b4b212ed105, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6655640153172724925, guid: 653ef58e7e8bc7140be19b4b212ed105, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6655640153172724925, guid: 653ef58e7e8bc7140be19b4b212ed105, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6655640153172724925, guid: 653ef58e7e8bc7140be19b4b212ed105, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6655640153172724925, guid: 653ef58e7e8bc7140be19b4b212ed105, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6655640153172724925, guid: 653ef58e7e8bc7140be19b4b212ed105, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6655640153172724925, guid: 653ef58e7e8bc7140be19b4b212ed105, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6655640153172724925, guid: 653ef58e7e8bc7140be19b4b212ed105, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6812226940738538922, guid: 653ef58e7e8bc7140be19b4b212ed105, type: 3}
+      propertyPath: m_Name
+      value: ArtifactVolcano
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 653ef58e7e8bc7140be19b4b212ed105, type: 3}
+--- !u!1 &1089861448 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6812226940738538922, guid: 653ef58e7e8bc7140be19b4b212ed105, type: 3}
+  m_PrefabInstance: {fileID: 1089861447}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1103377644
 GameObject:
   m_ObjectHideFlags: 0
@@ -5369,12 +5431,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyMoveSpeed: 1
   enemyDamage: 1
-  maxHp: 10
+  maxHp: 36
   hpBar: {fileID: 65104998}
   spaceGate: {fileID: 248591168}
   FireballPrefab: {fileID: 8783016171826762159, guid: ab8f02d42f29dd140811ed79942ad61a, type: 3}
   FireballSpawnPoint: {fileID: 655130384}
   circleMagic: {fileID: 419477141}
+  artifact: {fileID: 1089861448}
   attackRangeCollider: {fileID: 1103377646}
 --- !u!1001 &1688388004
 PrefabInstance:
@@ -10827,3 +10890,4 @@ SceneRoots:
   - {fileID: 1666175319}
   - {fileID: 293244123}
   - {fileID: 1203981958}
+  - {fileID: 1089861447}

@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4740784134911371536}
   - component: {fileID: 4401729192880034817}
-  - component: {fileID: 4610249644605583590}
   m_Layer: 0
   m_Name: Skill3
   m_TagString: Untagged
@@ -46,51 +45,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damageMultiplier: 4
-  effectPrefab: {fileID: 1637643985004089517, guid: 23dbe675ddd30c148a7769a9f3c4cf80, type: 3}
+  activeRadius: 10
   activeDuration: 0.5
---- !u!61 &4610249644605583590
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7046545226319544960}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: -0.013338566, y: 2.0006623}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Size: {x: 17.672188, y: 9.856268}
-  m_EdgeRadius: 0
+  effectPrefab: {fileID: 1637643985004089517, guid: 23dbe675ddd30c148a7769a9f3c4cf80, type: 3}

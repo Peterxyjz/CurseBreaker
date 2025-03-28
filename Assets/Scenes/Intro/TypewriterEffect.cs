@@ -14,9 +14,9 @@ public class TypewriterEffect : MonoBehaviour
     public float delay = 0.0000000005f; // Điều chỉnh tốc độ gõ chữ
 
     private string[] textLines = {
-        "Vương quốc chìm trong bóng tối, lời nguyền của mụ phù thủy đã biến nơi đây thành một vùng đất chết. Dịch bệnh lan tràn, người dân gục ngã, chỉ còn lại những tiếng than khóc vang vọng trong đêm. Nhưng giữa đống tro tàn ấy, ta tìm thấy manh mối về bốn thánh di vật – những báu vật cuối cùng có thể hóa giải lời nguyền. Không ai biết chúng đang ở đâu, chỉ biết rằng con đường dẫn đến chúng đầy rẫy hiểm nguy. Ta không có lựa chọn. Nếu đây là hy vọng cuối cùng, ta sẽ cầm kiếm lên và bước vào bóng tối.",
-        "Tương truyền, có một thánh di vật có thể hóa giải mọi lời nguyền. Nhưng theo thời gian, nó đã bị chia cắt và cất giấu tại những nơi nguy hiểm bậc nhất vương quốc. Một mảnh gợi ý cổ xưa đã dẫn ta đến điểm khởi đầu của hành trình.\r\n\r\nĐường đi phía trước không hề dễ dàng.Trên đường, những trái tim rải rác giúp ta phục hồi sức mạnh, nhưng ta cần tìm được những rương báu chứa vật phẩm để chuẩn bị cho thử thách lớn nhất—đánh bại kẻ bảo vệ di vật.",
-        "Hãy cùng ta chiến đấu"
+         "Vương quốc chìm trong bóng tối, lời nguyền của mụ phù thủy đã biến nơi đây thành một vùng đất chết. Dịch bệnh lan tràn, người dân gục ngã, chỉ còn lại những tiếng than khóc vang vọng trong đêm. Nhưng giữa đống tro tàn ấy, ta tìm thấy manh mối về bốn thánh di vật – những báu vật cuối cùng có thể hóa giải lời nguyền. Không ai biết chúng đang ở đâu, chỉ biết rằng con đường dẫn đến chúng đầy rẫy hiểm nguy. Ta không có lựa chọn. Nếu đây là hy vọng cuối cùng, ta sẽ cầm kiếm lên và bước vào bóng tối.",
+    "Tương truyền, có một thánh di vật có thể hóa giải mọi lời nguyền. Nhưng theo thời gian, nó đã bị chia cắt và cất giấu tại những nơi nguy hiểm bậc nhất vương quốc. Một mảnh gợi ý cổ xưa đã dẫn ta đến điểm khởi đầu của hành trình.\r\n\r\nĐường đi phía trước không hề dễ dàng.Trên đường, những trái tim rải rác giúp ta phục hồi sức mạnh, nhưng ta cần tìm được những rương báu chứa vật phẩm để chuẩn bị cho thử thách lớn nhất—đánh bại kẻ bảo vệ di vật.",
+    "Hãy cùng ta chiến đấu"
     };
     private int currentLine = 0;
     private bool isTyping = false; // Kiểm tra trạng thái gõ chữ
@@ -67,6 +67,6 @@ public class TypewriterEffect : MonoBehaviour
     private void LoadNextScene()
     {
         Debug.Log("Chuyển sang Scene mới!");
-         UnityEngine.SceneManagement.SceneManager.LoadScene("Volcano"); 
+         UnityEngine.SceneManagement.SceneManager.LoadScene("Forest"); 
     }
 }

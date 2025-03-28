@@ -13,6 +13,7 @@ TagManager:
   - NPC
   - GroundDie
   - Boss
+  - Artifact
   layers:
   - Default
   - TransparentFX

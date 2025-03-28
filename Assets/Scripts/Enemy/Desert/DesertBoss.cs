@@ -9,7 +9,7 @@ public class DesertBoss : Enemy
     [SerializeField] private float patrolDistance = 3f;     // Khoảng cách di chuyển trái-phải
     [SerializeField] private float moveSpeed = 4f;         // Tốc độ di chuyển
     [SerializeField] private float jumpForce = 4f;         // Lực nhảy
-
+    
     [Header("Boss Random Action")]
     private float actionCooldown = 4f;    // Thời gian giữa mỗi lần random hành động
     private float nextActionTime = 0f;
@@ -22,6 +22,7 @@ public class DesertBoss : Enemy
     public GameObject circleMagic;
     public GameObject spaceGate;
     private AudioMonster audio;
+    public GameObject artifact;
 
     [SerializeField] private GameObject normalAttackPrefab;
     [SerializeField] private GameObject exploreAttackPrefab;
@@ -58,6 +59,7 @@ public class DesertBoss : Enemy
         rb = GetComponent<Rigidbody2D>();
         circleMagic.SetActive(isBreakerTime);
         audio = FindAnyObjectByType<AudioMonster>();
+        artifact.gameObject.SetActive(false);
     }
 
     private void Update()
@@ -425,6 +427,7 @@ public class DesertBoss : Enemy
         circleMagic.SetActive(false);
         UpdateAnimator();
         spaceGate.SetActive(true);
+        artifact.gameObject.SetActive(true);
         StartCoroutine(DoAnimationDie());
         // Thêm logic rớt đồ, mở cổng, v.v.
     }
